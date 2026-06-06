@@ -1,0 +1,2946 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kelin Cakes — Confeitaria Artesanal Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ── TOKENS DE DESIGN ── */
+:root {
+  --rose:         #f2c4ce;
+  --rose-deep:    #e8a0b0;
+  --rose-blush:   #fdf0f3;
+  --choco:        #7b4f3a;
+  --choco-light:  #a8715a;
+  --choco-pale:   #d4b8ae;
+  --cream:        #faf5ef;
+  --cream-dark:   #f0e8dc;
+  --gold:         #c9a96e;
+  --text-dark:    #3a2a24;
+  --text-mid:     #7a6058;
+  --text-light:   #b09990;
+  --white:        #fffcfa;
+
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+
+  --shadow-soft:  0 4px 24px rgba(122,80,58,0.08);
+  --shadow-card:  0 8px 40px rgba(122,80,58,0.12);
+  --shadow-hover: 0 20px 60px rgba(122,80,58,0.22);
+
+  --ease:   cubic-bezier(0.25,0.46,0.45,0.94);
+  --spring: cubic-bezier(0.34,1.56,0.64,1);
+  --smooth: cubic-bezier(0.22,1,0.36,1);
+
+  --transition: 0.4s var(--ease);
+}
+
+*   { margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family:'Jost',sans-serif;
+  background:var(--cream);
+  color:var(--text-dark);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a { text-decoration:none; color:inherit; }
+button { cursor:pointer; font-family:'Jost',sans-serif; }
+
+.serif  { font-family:'Cormorant Garamond',serif; }
+.display{ font-family:'Cormorant Garamond',serif; font-weight:300; letter-spacing:-0.02em; }
+
+.container { width:100%; max-width:480px; margin:0 auto; padding:0 20px; }
+
+/* ── ANIMAÇÕES ── */
+.reveal {
+  opacity:0; transform:translateY(28px);
+  transition: opacity 0.7s var(--smooth), transform 0.7s var(--smooth);
+}
+.reveal.visible { opacity:1; transform:translateY(0); }
+.reveal-delay-1 { transition-delay:0.1s; }
+.reveal-delay-2 { transition-delay:0.2s; }
+.reveal-delay-3 { transition-delay:0.3s; }
+
+@keyframes float1 {
+  0%,100% { transform:translate(0,0) scale(1); }
+  50%     { transform:translate(20px,-20px) scale(1.05); }
+}
+@keyframes float2 {
+  0%,100% { transform:translate(0,0); }
+  50%     { transform:translate(-15px,15px); }
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%     { opacity:.5; transform:scale(1.4); }
+}
+@keyframes heroIn {
+  to { opacity:1; transform:translateY(0); }
+}
+@keyframes screenIn {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes slideIn {
+  from { opacity:0; transform:translateX(20px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+@keyframes badgePop {
+  0%   { transform: scale(0) rotate(-8deg); opacity:0; }
+  60%  { transform: scale(1.12) rotate(2deg); opacity:1; }
+  100% { transform: scale(1) rotate(0deg); opacity:1; }
+}
+
+/* ── NAV ── */
+.nav {
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  padding:14px 20px;
+  display:flex; align-items:center; justify-content:space-between;
+  transition:background var(--transition), box-shadow var(--transition);
+}
+.nav.scrolled {
+  background:rgba(250,245,239,0.95);
+  backdrop-filter:blur(16px);
+  box-shadow:0 2px 20px rgba(122,80,58,0.08);
+}
+.nav-logo {
+  display:flex; align-items:center; gap:10px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px; font-weight:500;
+  color:var(--choco); letter-spacing:0.04em;
+}
+.nav-logo-img { height:40px; width:auto; display:block; }
+.nav-logo-icon { flex-shrink:0; }
+.nav-actions   { display:flex; align-items:center; gap:12px; }
+
+.nav-cart {
+  position:relative;
+  background:var(--white);
+  border-radius:50%;
+  width:44px; height:44px;
+  display:flex; align-items:center; justify-content:center;
+  transition:0.5s var(--spring);
+  box-shadow:var(--shadow-soft);
+  border:none;
+}
+.nav-cart:hover  { transform:scale(1.1); background:var(--rose-blush); }
+.nav-cart:active { transform:scale(0.95); }
+
+.cart-badge {
+  position:absolute; top:-4px; right:-4px;
+  background:var(--choco); color:var(--white);
+  font-size:10px; font-weight:600;
+  width:18px; height:18px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transform:scale(0);
+  transition:0.5s var(--spring);
+}
+.cart-badge.show { opacity:1; transform:scale(1); }
+
+/* ── HERO ── */
+.hero {
+  min-height:100svh;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center;
+  padding:100px 24px 60px;
+  position:relative; overflow:hidden;
+}
+.hero-bg {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 20%,rgba(242,196,206,0.45) 0%,transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 80%,rgba(201,169,110,0.15) 0%,transparent 60%),
+    linear-gradient(180deg,#fdf0f3 0%,#faf5ef 60%,#f0e8dc 100%);
+}
+.hero-orb { position:absolute; border-radius:50%; pointer-events:none; }
+.hero-orb-1 {
+  width:300px; height:300px; top:-80px; left:-100px;
+  background:radial-gradient(circle,rgba(242,196,206,0.3) 0%,transparent 70%);
+  animation:float1 8s ease-in-out infinite;
+}
+.hero-orb-2 {
+  width:200px; height:200px; bottom:60px; right:-60px;
+  background:radial-gradient(circle,rgba(168,113,90,0.12) 0%,transparent 70%);
+  animation:float2 10s ease-in-out infinite;
+}
+
+/* ── LOGO DO HERO ── */
+.hero-logo-wrap {
+  margin-bottom:24px;
+  opacity:0; transform:translateY(20px);
+  animation:heroIn 0.8s 0.1s ease forwards;
+}
+.hero-logo-img {
+  height:110px;
+  width:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 4px 16px rgba(122,80,58,0.15));
+}
+
+.hero-content { position:relative; z-index:1; }
+.hero-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(255,252,250,0.8);
+  border:1px solid var(--rose-deep);
+  border-radius:100px; padding:6px 16px;
+  font-size:11px; font-weight:500;
+  letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--choco-light); margin-bottom:24px;
+  backdrop-filter:blur(8px);
+  opacity:0; transform:translateY(20px);
+  animation:heroIn 0.8s 0.2s ease forwards;
+}
+.hero-tag::before {
+  content:''; width:6px; height:6px;
+  border-radius:50%; background:var(--rose-deep);
+  animation:pulse 2s ease infinite;
+}
+.hero-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(56px,18vw,80px);
+  font-weight:300; color:var(--choco);
+  line-height:0.9; letter-spacing:-0.03em;
+  margin-bottom:20px;
+  opacity:0; transform:translateY(30px);
+  animation:heroIn 1s 0.4s ease forwards;
+}
+.hero-title em { font-style:italic; color:var(--choco-light); }
+.hero-sub {
+  font-size:15px; font-weight:300; color:var(--text-mid);
+  line-height:1.7; max-width:300px;
+  margin:0 auto 36px;
+  opacity:0; transform:translateY(20px);
+  animation:heroIn 0.8s 0.6s ease forwards;
+}
+.hero-ctas {
+  display:flex; gap:12px;
+  justify-content:center; flex-wrap:wrap;
+  opacity:0; transform:translateY(20px);
+  animation:heroIn 0.8s 0.8s ease forwards;
+}
+
+/* ── BOTÕES ── */
+.btn {
+  display:inline-flex; align-items:center;
+  justify-content:center; gap:8px;
+  border:none;
+  font-size:13px; font-weight:500;
+  letter-spacing:0.08em;
+  border-radius:100px; padding:14px 28px;
+  transition:0.5s var(--spring);
+  position:relative; overflow:hidden;
+}
+.btn::after {
+  content:''; position:absolute; inset:0;
+  background:rgba(255,255,255,0.15);
+  opacity:0; transition:opacity 0.3s;
+}
+.btn:hover::after { opacity:1; }
+.btn:active       { transform:scale(0.96) !important; }
+
+.btn-primary {
+  background:linear-gradient(135deg,var(--choco) 0%,var(--choco-light) 100%);
+  color:var(--white);
+  box-shadow:0 4px 20px rgba(122,80,58,0.3);
+}
+.btn-primary:hover {
+  transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(122,80,58,0.4);
+}
+.btn-outline {
+  background:rgba(255,252,250,0.8);
+  border:1.5px solid var(--choco-pale);
+  color:var(--choco);
+  backdrop-filter:blur(8px);
+}
+.btn-outline:hover {
+  transform:translateY(-2px);
+  border-color:var(--choco-light);
+  background:var(--white);
+}
+.btn-rose {
+  background:linear-gradient(135deg,var(--rose-deep) 0%,var(--rose) 100%);
+  color:var(--choco);
+  box-shadow:0 4px 16px rgba(232,160,176,0.4);
+}
+.btn-rose:hover {
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(232,160,176,0.5);
+}
+.btn-wpp {
+  background:linear-gradient(135deg,#25d366 0%,#1da851 100%);
+  color:white;
+  box-shadow:0 4px 16px rgba(37,211,102,0.3);
+}
+.btn-wpp:hover {
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(37,211,102,0.4);
+}
+.btn-wpp-outline {
+  background:transparent;
+  border:1.5px solid rgba(37,211,102,0.5);
+  color:#1a8a45;
+}
+.btn-wpp-outline:hover {
+  background:rgba(37,211,102,0.08);
+  border-color:#25d366;
+}
+.btn-sm   { padding:10px 20px; font-size:12px; }
+.btn-full { width:100%; justify-content:center; }
+
+/* ── SEÇÕES ── */
+.section { padding:72px 0; }
+.section-bg-white  { background:var(--white); }
+.section-bg-cream  { background:var(--cream); }
+.section-bg-rose   { background:linear-gradient(180deg,var(--cream) 0%,var(--rose-blush) 100%); }
+.section-bg-dark   { background:linear-gradient(135deg,var(--choco) 0%,var(--choco-light) 100%); }
+
+.section-header   { text-align:center; margin-bottom:40px; }
+.section-tag {
+  display:inline-block;
+  font-size:10px; font-weight:600;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--choco-light);
+  background:var(--cream-dark);
+  padding:5px 14px; border-radius:100px;
+  margin-bottom:12px;
+}
+.section-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,8vw,44px);
+  font-weight:300; color:var(--choco); line-height:1.1;
+}
+.section-sub {
+  margin-top:10px;
+  font-size:14px; font-weight:300;
+  color:var(--text-mid); line-height:1.7;
+}
+.divider {
+  width:48px; height:1.5px;
+  background:linear-gradient(90deg,var(--rose-deep),var(--choco-pale));
+  margin:16px auto; border-radius:2px;
+}
+
+/* ── Filtros ── */
+.catalog-filters {
+  display:flex; gap:8px;
+  overflow-x:auto; padding:0 20px 16px;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  margin:0 -20px 8px;
+}
+.catalog-filters::-webkit-scrollbar { display:none; }
+.filter-btn {
+  flex-shrink:0; padding:8px 16px;
+  border-radius:100px;
+  border:1.5px solid var(--cream-dark);
+  background:var(--white);
+  font-size:12px; font-weight:500;
+  color:var(--text-mid);
+  transition:var(--transition); white-space:nowrap;
+}
+.filter-btn.active,
+.filter-btn:hover {
+  background:var(--choco);
+  border-color:var(--choco);
+  color:var(--white);
+}
+
+/* ── Grid de produtos ── */
+.products-list {
+  display:flex; flex-direction:column; gap:20px;
+}
+
+/* ── PRODUCT CARD ── */
+.pcard {
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  border:1px solid rgba(212,184,174,0.3);
+  box-shadow:var(--shadow-card);
+  overflow:hidden;
+  transition:0.5s var(--spring);
+}
+.pcard:hover {
+  box-shadow:var(--shadow-hover);
+  transform:translateY(-3px);
+}
+.pcard.pcard-festa {
+  border:1.5px solid var(--rose-deep);
+  background:linear-gradient(180deg, rgba(253,240,243,0.6) 0%, var(--white) 40%);
+}
+.pcard.pcard-gold {
+  border:1.5px solid rgba(201,169,110,0.5);
+  background:linear-gradient(180deg, rgba(250,248,241,0.8) 0%, var(--white) 40%);
+}
+.pcard.pcard-gourmet {
+  border:1.5px solid rgba(201,169,110,0.6);
+  background:linear-gradient(180deg, rgba(253,248,235,0.9) 0%, var(--white) 40%);
+}
+.pcard.pcard-promo {
+  border:1.5px solid #e8a0b0;
+  background:linear-gradient(180deg, rgba(255,248,240,0.9) 0%, var(--white) 40%);
+}
+
+/* ── Galeria de fotos ── */
+.pcard-gallery {
+  position:relative; width:100%; aspect-ratio:4/3;
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--cream-dark),rgba(242,196,206,0.3));
+  cursor:grab; user-select:none;
+}
+.pcard-gallery:active { cursor:grabbing; }
+.pcard-gallery-track {
+  display:flex; height:100%;
+  transition:transform 0.4s var(--smooth);
+  will-change:transform;
+}
+.pcard-gallery-track.dragging { transition:none; }
+.pcard-slide { flex-shrink:0; width:100%; height:100%; position:relative; }
+.pcard-slide img {
+  width:100%; height:100%; object-fit:cover; display:block; pointer-events:none;
+}
+.pcard-slide-placeholder {
+  width:100%; height:100%;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:10px;
+  background:linear-gradient(135deg,var(--cream-dark) 0%,rgba(242,196,206,0.3) 100%);
+  position:relative;
+}
+.pcard-slide-placeholder-emoji { font-size:44px; opacity:0.45; }
+.pcard-slide-placeholder-label {
+  font-size:11px; color:var(--text-mid); text-align:center;
+  padding:0 20px; line-height:1.5; font-weight:400;
+}
+.pcard-slide-placeholder-hint {
+  display:flex; align-items:center; gap:6px;
+  background:rgba(255,252,250,0.8);
+  border:1px dashed var(--choco-pale); border-radius:100px;
+  padding:5px 14px; font-size:10px; color:var(--choco-light); letter-spacing:0.05em;
+}
+.pcard-slide-num {
+  position:absolute; top:10px; right:10px;
+  background:rgba(255,252,250,0.85); border-radius:100px;
+  padding:3px 10px; font-size:10px; font-weight:600;
+  color:var(--choco-light); letter-spacing:0.08em;
+}
+.pcard-badge {
+  position:absolute; top:12px; left:12px; z-index:2;
+  background:var(--choco); color:var(--white);
+  font-size:9px; font-weight:600;
+  letter-spacing:0.1em; text-transform:uppercase;
+  padding:4px 12px; border-radius:100px;
+  pointer-events:none;
+  animation: badgePop 0.5s 0.2s var(--spring) both;
+}
+.pcard-badge.new    { background:var(--rose-deep); color:var(--choco); }
+.pcard-badge.promo  { background:var(--gold); color:var(--white); }
+.pcard-badge.fav    { background:var(--choco); color:var(--white); }
+.pcard-badge.gourmet{ background:linear-gradient(135deg,#c9a96e,#a07840); color:var(--white); }
+.pcard-badge.oferta { background:linear-gradient(135deg,#e85d5d,#c93838); color:var(--white); }
+
+.pcard-badge-stack {
+  position:absolute; top:12px; left:12px; z-index:2;
+  display:flex; flex-direction:column; gap:4px;
+  pointer-events:none;
+}
+.pcard-badge-stack .pcard-badge {
+  position:static;
+  animation: badgePop 0.5s 0.2s var(--spring) both;
+}
+.pcard-badge-old {
+  font-size:9px; font-weight:600; letter-spacing:0.05em;
+  background:rgba(255,252,250,0.88); color:var(--text-mid);
+  padding:3px 10px; border-radius:100px;
+  text-decoration:line-through;
+  animation: badgePop 0.5s 0.3s var(--spring) both;
+  opacity:0;
+}
+
+.pcard-nav {
+  position:absolute; top:50%; transform:translateY(-50%); z-index:3;
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(255,252,250,0.9); border:none;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--choco); box-shadow:0 2px 12px rgba(122,80,58,0.2);
+  transition:0.3s var(--spring); opacity:0; pointer-events:none;
+}
+.pcard:hover .pcard-nav,
+.pcard-gallery:focus-within .pcard-nav { opacity:1; pointer-events:all; }
+.pcard-nav:hover { transform:translateY(-50%) scale(1.1); background:var(--white); }
+.pcard-nav-prev { left:8px; }
+.pcard-nav-next { right:8px; }
+@media (hover:none) { .pcard-nav { opacity:1; pointer-events:all; } }
+.pcard-dots {
+  position:absolute; bottom:10px; left:0; right:0;
+  display:flex; justify-content:center; gap:5px; pointer-events:none;
+}
+.pcard-dot { width:5px; height:5px; border-radius:50%; background:rgba(255,252,250,0.5); transition:all 0.3s; }
+.pcard-dot.active { background:var(--white); width:14px; border-radius:3px; }
+
+/* ── Corpo do card ── */
+.pcard-body { padding:20px 20px 22px; }
+.pcard-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:6px; }
+.pcard-name {
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px; font-weight:500; color:var(--choco); line-height:1.2;
+}
+.pcard-price {
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px; font-weight:600; color:var(--choco); white-space:nowrap; flex-shrink:0;
+}
+.pcard-price small {
+  font-family:'Jost',sans-serif; font-size:11px; font-weight:400;
+  color:var(--text-light); display:block; text-align:right;
+}
+.pcard-price-promo {
+  display:flex; flex-direction:column; align-items:flex-end; flex-shrink:0; gap:1px;
+}
+.pcard-price-promo .price-old {
+  font-family:'Cormorant Garamond',serif; font-size:14px; font-weight:400;
+  color:var(--text-light); text-decoration:line-through;
+}
+.pcard-price-promo .price-new {
+  font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600;
+  color:#c93838;
+}
+.pcard-price-promo small {
+  font-family:'Jost',sans-serif; font-size:11px; font-weight:400;
+  color:var(--text-light);
+}
+
+.pcard-desc { font-size:13px; font-weight:300; color:var(--text-mid); line-height:1.6; margin-bottom:16px; }
+
+/* ── Opções extras (caixa + topper) ── */
+.pcard-extras {
+  background:linear-gradient(135deg,rgba(253,240,243,0.5),rgba(250,248,241,0.5));
+  border:1px solid rgba(212,184,174,0.35);
+  border-radius:var(--radius-sm);
+  padding:14px 16px; margin-bottom:16px;
+}
+.pcard-extras-title {
+  font-size:10px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--choco-light); margin-bottom:12px; display:flex; align-items:center; gap:6px;
+}
+.pcard-extras-title::before { content:'✦'; font-size:8px; }
+.extra-option {
+  display:flex; align-items:center; gap:12px;
+  padding:10px 0; border-bottom:1px solid rgba(240,232,220,0.7);
+  cursor:pointer; transition:var(--transition);
+}
+.extra-option:last-child { border-bottom:none; padding-bottom:0; }
+.extra-checkbox {
+  width:20px; height:20px; border-radius:6px;
+  border:2px solid var(--choco-pale);
+  background:var(--white);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; transition:0.3s var(--spring);
+}
+.extra-checkbox.checked { background:var(--choco); border-color:var(--choco); }
+.extra-checkbox svg { opacity:0; transition:0.2s; }
+.extra-checkbox.checked svg { opacity:1; }
+.extra-label { flex:1; }
+.extra-label-name { font-size:13px; font-weight:500; color:var(--text-dark); }
+.extra-label-desc { font-size:11px; color:var(--text-light); margin-top:1px; }
+.extra-price {
+  font-family:'Cormorant Garamond',serif; font-size:15px; font-weight:600;
+  color:var(--choco-light); flex-shrink:0;
+}
+
+/* ── O que inclui ── */
+.pcard-includes {
+  list-style:none;
+  background:rgba(242,196,206,0.12);
+  border:1px solid rgba(232,160,176,0.25);
+  border-radius:var(--radius-sm);
+  padding:12px 16px; margin-bottom:16px;
+  display:grid; grid-template-columns:1fr 1fr; gap:2px 8px;
+}
+.pcard-includes li { font-size:12px; color:var(--text-mid); line-height:1.8; }
+.pcard-includes li::before { content:'✓ '; color:var(--choco-light); font-weight:600; }
+
+/* ── Quantidade ── */
+.pcard-qty-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 14px; background:var(--cream); border-radius:var(--radius-sm); margin-bottom:14px;
+}
+.pcard-qty-label { font-size:12px; color:var(--text-mid); }
+.pcard-qty-ctrl  { display:flex; align-items:center; gap:10px; }
+.pcard-qty-btn   {
+  width:30px; height:30px; border-radius:50%;
+  border:1.5px solid var(--cream-dark); background:var(--white);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:500; color:var(--choco);
+  transition:0.4s var(--spring);
+}
+.pcard-qty-btn:hover { background:var(--choco); border-color:var(--choco); color:var(--white); transform:scale(1.12); }
+.pcard-qty-num {
+  font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600;
+  color:var(--choco); min-width:28px; text-align:center;
+}
+
+/* ── KIT SELECTOR ── */
+.kit-selector { margin-bottom:16px; }
+.kit-selector-title {
+  font-size:10px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--choco-light); margin-bottom:10px; display:block;
+}
+.kit-options { display:flex; flex-direction:column; gap:8px; }
+.kit-option {
+  border:2px solid var(--cream-dark);
+  border-radius:var(--radius-sm);
+  padding:12px 14px; cursor:pointer;
+  transition:0.35s var(--spring);
+  background:var(--white); position:relative; overflow:hidden;
+}
+.kit-option:hover { border-color:var(--choco-pale); background:var(--cream); }
+.kit-option.selected {
+  border-color:var(--choco);
+  background:linear-gradient(135deg,rgba(122,80,58,0.04),rgba(168,113,90,0.04));
+}
+.kit-option.selected::before {
+  content:'✓'; position:absolute; top:10px; right:12px;
+  width:20px; height:20px; border-radius:50%;
+  background:var(--choco); color:var(--white);
+  font-size:10px; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+.kit-option-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+.kit-option-name {
+  font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; color:var(--choco);
+}
+.kit-option-price {
+  font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600;
+  color:var(--choco-light);
+}
+.kit-option-items { font-size:11px; color:var(--text-mid); line-height:1.7; }
+.kit-option-items span { margin-right:6px; }
+.kit-option-items span::after { content:' ·'; color:var(--choco-pale); }
+.kit-option-items span:last-child::after { content:''; }
+
+/* ── Campos de personalização ── */
+.pcard-customize { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+.pcard-field-label {
+  font-size:10px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--choco-light); margin-bottom:4px; display:block;
+}
+.pcard-input, .pcard-select, .pcard-textarea {
+  width:100%; padding:10px 14px;
+  background:var(--cream); border:1.5px solid var(--cream-dark);
+  border-radius:var(--radius-sm);
+  font-family:'Jost',sans-serif; font-size:13px; color:var(--text-dark);
+  outline:none; transition:border-color 0.3s, box-shadow 0.3s;
+}
+.pcard-select {
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a8715a' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center;
+}
+.pcard-textarea { resize:vertical; min-height:72px; line-height:1.5; }
+.pcard-input::placeholder, .pcard-textarea::placeholder { color:var(--text-light); }
+.pcard-input:focus, .pcard-select:focus, .pcard-textarea:focus {
+  border-color:var(--rose-deep); box-shadow:0 0 0 3px rgba(232,160,176,0.15);
+}
+.pcard-fields-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+/* Estimativa de preço */
+.pcard-price-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 14px; background:var(--cream); border-radius:var(--radius-sm); margin-bottom:14px;
+}
+.pcard-price-row-label { font-size:12px; color:var(--text-mid); }
+.pcard-price-row-val {
+  font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:600; color:var(--choco);
+}
+
+/* Preço do bolo por kg */
+.pcard-kg-row {
+  background:linear-gradient(135deg,rgba(242,196,206,0.15),rgba(250,248,241,0.2));
+  border:1px solid rgba(212,184,174,0.3); border-radius:var(--radius-sm);
+  padding:12px 16px; margin-bottom:14px;
+}
+.pcard-kg-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.pcard-kg-label { font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--choco-light); }
+.pcard-kg-price-display {
+  font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--choco);
+}
+.pcard-kg-slider-wrap { display:flex; align-items:center; gap:10px; }
+.pcard-kg-slider {
+  flex:1; -webkit-appearance:none; height:4px;
+  background:linear-gradient(90deg,var(--choco-light) var(--val,40%),var(--cream-dark) var(--val,40%));
+  border-radius:2px; outline:none; cursor:pointer;
+}
+.pcard-kg-slider::-webkit-slider-thumb {
+  -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+  background:var(--choco); box-shadow:0 2px 8px rgba(122,80,58,0.3);
+  cursor:pointer; transition:0.3s var(--spring);
+}
+.pcard-kg-slider::-webkit-slider-thumb:hover { transform:scale(1.2); }
+.pcard-kg-value { font-size:13px; font-weight:600; color:var(--choco); min-width:40px; text-align:right; }
+.pcard-kg-note { font-size:11px; color:var(--text-light); margin-top:4px; }
+
+/* ── MASSA SELECTOR ── */
+.pcard-massa-selector {
+  margin-bottom: 2px;
+}
+.pcard-massa-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--choco-light);
+  margin-bottom: 10px;
+  display: block;
+}
+.pcard-massa-options {
+  display: flex;
+  gap: 10px;
+}
+.pcard-massa-option {
+  flex: 1;
+  position: relative;
+}
+.pcard-massa-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.pcard-massa-option-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 14px;
+  background: var(--white);
+  border: 1.5px solid var(--cream-dark);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: 0.35s var(--spring);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-mid);
+  line-height: 1.3;
+}
+.pcard-massa-option-label:hover {
+  border-color: var(--choco-pale);
+  background: var(--cream);
+}
+.pcard-massa-option input[type="radio"]:checked + .pcard-massa-option-label {
+  border-color: var(--choco);
+  background: linear-gradient(135deg, rgba(122,80,58,0.05), rgba(168,113,90,0.04));
+  color: var(--choco);
+  font-weight: 500;
+}
+.pcard-massa-radio-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--choco-pale);
+  background: var(--white);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s var(--spring);
+}
+.pcard-massa-option input[type="radio"]:checked + .pcard-massa-option-label .pcard-massa-radio-dot {
+  border-color: var(--choco);
+  background: var(--choco);
+  box-shadow: 0 0 0 3px rgba(122,80,58,0.12);
+}
+.pcard-massa-radio-dot::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--white);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.pcard-massa-option input[type="radio"]:checked + .pcard-massa-option-label .pcard-massa-radio-dot::after {
+  opacity: 1;
+}
+.pcard-massa-icon {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* ── CARRINHO ── */
+.cart-overlay {
+  position:fixed; inset:0; background:rgba(58,42,36,0.5); z-index:1100;
+  opacity:0; pointer-events:none; transition:opacity 0.4s; backdrop-filter:blur(4px);
+}
+.cart-overlay.open { opacity:1; pointer-events:all; }
+.cart-panel {
+  position:fixed; top:0; right:0; bottom:0; width:min(400px,100vw);
+  background:var(--white); z-index:1200; display:flex; flex-direction:column;
+  transform:translateX(100%); transition:transform 0.4s var(--ease);
+  box-shadow:-10px 0 60px rgba(122,80,58,0.15);
+}
+.cart-panel.open { transform:translateX(0); }
+.cart-header {
+  padding:24px 20px 20px; border-bottom:1px solid var(--cream-dark);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.cart-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:500; color:var(--choco); }
+.cart-close {
+  width:36px; height:36px; border-radius:50%; border:1.5px solid var(--cream-dark);
+  background:var(--cream); display:flex; align-items:center; justify-content:center;
+  color:var(--text-mid); transition:0.5s var(--spring);
+}
+.cart-close:hover { background:var(--rose-blush); border-color:var(--rose-deep); transform:scale(1.1); }
+.cart-items { flex:1; overflow-y:auto; padding:16px 20px; }
+.cart-empty {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  height:200px; gap:12px; color:var(--text-light); font-size:14px; font-weight:300;
+}
+.cart-empty svg { width:48px; height:48px; opacity:.3; }
+.cart-item {
+  display:flex; align-items:center; gap:12px; padding:14px 0;
+  border-bottom:1px solid var(--cream-dark); animation:slideIn 0.3s ease;
+}
+.cart-item-img-placeholder {
+  width:60px; height:60px; border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,var(--cream-dark),rgba(242,196,206,0.3));
+  flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:24px;
+}
+.cart-item-info  { flex:1; min-width:0; }
+.cart-item-name  { font-family:'Cormorant Garamond',serif; font-size:15px; font-weight:500; color:var(--choco); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cart-item-sub   { font-size:11px; color:var(--text-light); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cart-item-price { font-size:12px; color:var(--text-mid); margin-top:2px; }
+.cart-item-total { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; color:var(--choco); white-space:nowrap; }
+.qty-ctrl { display:flex; align-items:center; gap:8px; margin-top:8px; }
+.qty-btn  {
+  width:26px; height:26px; border-radius:50%; border:1.5px solid var(--cream-dark);
+  background:var(--cream); display:flex; align-items:center; justify-content:center;
+  font-size:14px; color:var(--choco); transition:0.5s var(--spring);
+}
+.qty-btn:hover { background:var(--choco); border-color:var(--choco); color:var(--white); transform:scale(1.15); }
+.qty-num { font-size:13px; font-weight:500; color:var(--choco); min-width:16px; text-align:center; }
+.cart-footer {
+  padding:20px; border-top:1px solid var(--cream-dark); background:var(--cream);
+}
+.cart-subtotal { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.cart-subtotal-label { font-size:13px; color:var(--text-mid); }
+.cart-subtotal-value { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:var(--choco); }
+
+/* ── TELAS DE CHECKOUT ── */
+.screen {
+  display:none; position:fixed; inset:0;
+  background:var(--cream); z-index:2000; overflow-y:auto;
+  animation:screenIn 0.4s var(--ease);
+}
+.screen.active { display:block; }
+.screen-header {
+  position:sticky; top:0;
+  background:rgba(250,245,239,0.95); backdrop-filter:blur(16px);
+  padding:16px 20px; display:flex; align-items:center; gap:14px;
+  border-bottom:1px solid var(--cream-dark); z-index:10;
+}
+.screen-back {
+  width:36px; height:36px; border-radius:50%; border:1.5px solid var(--cream-dark);
+  background:var(--white); display:flex; align-items:center; justify-content:center;
+  color:var(--choco); flex-shrink:0; transition:0.5s var(--spring);
+}
+.screen-back:hover { background:var(--rose-blush); border-color:var(--rose-deep); transform:scale(1.1); }
+.screen-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; color:var(--choco); }
+.screen-body { padding:24px 20px 40px; max-width:480px; margin:0 auto; }
+
+.form-group  { margin-bottom:20px; }
+.form-label  { display:block; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--choco-light); margin-bottom:8px; }
+.form-input  {
+  width:100%; padding:14px 16px; background:var(--white); border:1.5px solid var(--cream-dark);
+  border-radius:var(--radius-sm); font-family:'Jost',sans-serif; font-size:14px; color:var(--text-dark);
+  transition:border-color 0.3s, box-shadow 0.3s; outline:none; appearance:none;
+}
+.form-input:focus { border-color:var(--rose-deep); box-shadow:0 0 0 3px rgba(232,160,176,0.15); }
+.form-input::placeholder { color:var(--text-light); }
+textarea.form-input { resize:vertical; min-height:90px; }
+
+.radio-group  { display:flex; gap:10px; }
+.radio-option { flex:1; position:relative; }
+.radio-option input { position:absolute; opacity:0; width:0; height:0; }
+.radio-label  {
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  padding:14px 12px; background:var(--white); border:1.5px solid var(--cream-dark);
+  border-radius:var(--radius-sm); cursor:pointer; transition:var(--transition); text-align:center;
+}
+.radio-label svg  { color:var(--text-light); transition:color 0.3s; }
+.radio-label span { font-size:12px; font-weight:500; color:var(--text-mid); }
+.radio-option input:checked + .radio-label { border-color:var(--choco); background:rgba(122,80,58,0.05); }
+.radio-option input:checked + .radio-label svg  { color:var(--choco); }
+.radio-option input:checked + .radio-label span { color:var(--choco); font-weight:600; }
+
+.frete-aviso {
+  background:rgba(242,196,206,0.25); border:1px solid var(--rose-deep);
+  border-radius:var(--radius-sm); padding:12px 16px; margin-top:10px;
+  font-size:12px; color:var(--choco); line-height:1.6; display:flex; gap:10px; align-items:flex-start;
+}
+
+.step-counter { display:flex; align-items:center; justify-content:center; gap:0; margin-bottom:32px; }
+.step-dot {
+  width:32px; height:32px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:600; transition:var(--transition);
+}
+.step-dot.done    { background:var(--choco); color:var(--white); }
+.step-dot.active  { background:var(--rose-deep); color:var(--choco); border:2px solid var(--choco); }
+.step-dot.pending { background:var(--cream-dark); color:var(--text-light); }
+.step-line       { flex:1; height:2px; max-width:40px; background:var(--cream-dark); }
+.step-line.done  { background:var(--choco); }
+
+.order-summary        { background:var(--white); border-radius:var(--radius-md); border:1px solid var(--cream-dark); overflow:hidden; margin-bottom:24px; }
+.order-summary-header { padding:16px 20px; background:linear-gradient(135deg,var(--choco),var(--choco-light)); color:var(--white); }
+.order-summary-title  { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:500; }
+.order-summary-items  { padding:12px 0; }
+.order-sum-item       { display:flex; justify-content:space-between; align-items:center; padding:10px 20px; border-bottom:1px solid var(--cream-dark); font-size:13px; }
+.order-sum-item:last-child { border-bottom:none; }
+.order-sum-item-name  { color:var(--text-dark); flex:1; margin-right:8px; }
+.order-sum-item-qty   { color:var(--text-light); font-size:12px; }
+.order-sum-item-price { font-weight:500; color:var(--choco); }
+.order-sum-total      { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; background:var(--cream); border-top:1.5px solid var(--cream-dark); }
+.order-sum-total-label{ font-size:13px; color:var(--text-mid); font-weight:500; }
+.order-sum-total-val  { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:600; color:var(--choco); }
+
+.info-card       { background:var(--white); border-radius:var(--radius-md); border:1px solid var(--cream-dark); padding:20px; margin-bottom:24px; }
+.info-card-title { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:500; color:var(--choco); margin-bottom:14px; }
+.info-row        { display:flex; justify-content:space-between; align-items:flex-start; padding:8px 0; border-bottom:1px solid rgba(240,232,220,0.7); gap:12px; }
+.info-row:last-child { border-bottom:none; }
+.info-row-label  { font-size:11px; color:var(--text-light); flex-shrink:0; }
+.info-row-value  { font-size:13px; color:var(--text-dark); font-weight:500; text-align:right; }
+
+.payment-box { background:var(--white); border-radius:var(--radius-lg); border:1px solid var(--cream-dark); padding:28px 24px; text-align:center; margin-bottom:24px; box-shadow:var(--shadow-card); }
+.payment-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:500; color:var(--choco); margin-bottom:4px; }
+.payment-sub   { font-size:13px; color:var(--text-mid); margin-bottom:24px; }
+.payment-amounts { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:28px; }
+.amount-card   { padding:16px 12px; border-radius:var(--radius-sm); text-align:center; }
+.amount-card.total   { background:var(--cream); border:1px solid var(--cream-dark); }
+.amount-card.entrada { background:linear-gradient(135deg,rgba(242,196,206,0.4),rgba(232,160,176,0.2)); border:1.5px solid var(--rose-deep); }
+.amount-card-label { font-size:10px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-light); margin-bottom:6px; }
+.amount-card.entrada .amount-card-label { color:var(--choco-light); }
+.amount-card-value { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:600; color:var(--choco); }
+.qr-wrap { background:var(--white); border:2px solid var(--cream-dark); border-radius:var(--radius-md); padding:20px; display:inline-block; margin-bottom:20px; }
+.pix-key-row { display:flex; align-items:center; gap:10px; background:var(--cream); border:1.5px solid var(--cream-dark); border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:16px; }
+.pix-key-label { font-size:11px; color:var(--text-light); }
+.pix-key-value { font-size:14px; font-weight:500; color:var(--choco); flex:1; }
+.copy-feedback { display:inline-flex; align-items:center; gap:6px; background:rgba(37,211,102,0.1); border:1px solid rgba(37,211,102,0.3); color:#1a9e45; border-radius:100px; padding:6px 14px; font-size:12px; font-weight:500; opacity:0; transform:scale(0.8); transition:0.5s var(--spring); margin-bottom:12px; }
+.copy-feedback.show { opacity:1; transform:scale(1); }
+
+.confirmation-icon { width:80px; height:80px; background:linear-gradient(135deg,rgba(37,211,102,0.2),rgba(29,168,81,0.1)); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; border:2px solid rgba(37,211,102,0.3); }
+
+/* ── COMO FUNCIONA ── */
+.steps-list { display:flex; flex-direction:column; gap:0; }
+.step-item  { display:flex; gap:20px; padding:20px 0; position:relative; }
+.step-item:not(:last-child)::after { content:''; position:absolute; left:19px; top:56px; bottom:0; width:2px; background:linear-gradient(180deg,var(--rose-deep),transparent); }
+.step-num   { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--choco),var(--choco-light)); color:var(--white); font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:600; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 4px 16px rgba(122,80,58,0.25); }
+.step-title { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:500; color:var(--choco); margin-bottom:4px; }
+.step-desc  { font-size:13px; font-weight:300; color:var(--text-mid); line-height:1.6; }
+
+/* ── SOBRE ── */
+.about-content {
+  background:linear-gradient(135deg,rgba(242,196,206,0.2),rgba(201,169,110,0.1));
+  border:1px solid rgba(242,196,206,0.5); border-radius:var(--radius-xl);
+  padding:40px 28px; position:relative; overflow:hidden;
+}
+.about-content::before { content:''; position:absolute; top:-40px; right:-40px; width:180px; height:180px; border-radius:50%; background:radial-gradient(circle,rgba(242,196,206,0.4),transparent 70%); }
+.about-icon { width:64px; height:64px; background:linear-gradient(135deg,var(--rose),var(--rose-deep)); border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; margin:0 auto 20px; box-shadow:0 8px 24px rgba(232,160,176,0.3); }
+.about-text { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:300; font-style:italic; color:var(--choco); line-height:1.7; text-align:center; margin-bottom:16px; }
+.about-desc { font-size:13px; font-weight:300; color:var(--text-mid); line-height:1.7; text-align:center; }
+.about-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--cream-dark); border-radius:var(--radius-md); overflow:hidden; margin-top:28px; }
+.stat       { background:var(--white); padding:20px 12px; text-align:center; }
+.stat-num   { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:600; color:var(--choco); display:block; }
+.stat-label { font-size:11px; color:var(--text-light); margin-top:2px; display:block; }
+
+/* ── LOCALIZAÇÃO ── */
+.info-cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.info-block      { background:var(--white); border-radius:var(--radius-md); padding:20px 16px; border:1px solid rgba(212,184,174,0.3); }
+.info-block-full { grid-column:span 2; }
+.info-block-icon  { font-size:22px; margin-bottom:8px; display:block; }
+.info-block-title { font-family:'Cormorant Garamond',serif; font-size:15px; font-weight:500; color:var(--choco); margin-bottom:8px; }
+.info-block-text  { font-size:12px; color:var(--text-mid); line-height:1.7; }
+.horario-row      { display:flex; justify-content:space-between; font-size:12px; padding:4px 0; border-bottom:1px solid rgba(240,232,220,0.6); }
+.horario-row:last-child { border-bottom:none; }
+.horario-dia  { color:var(--text-mid); }
+.horario-hora { color:var(--choco); font-weight:500; }
+.map-wrap { grid-column:span 2; border-radius:var(--radius-md); overflow:hidden; border:1px solid rgba(212,184,174,0.3); box-shadow:var(--shadow-soft); height:260px; }
+.map-wrap iframe { width:100%; height:100%; border:0; display:block; }
+
+/* ── CONTATO ── */
+.contact { padding:72px 0; position:relative; overflow:hidden; }
+.contact::before { content:''; position:absolute; top:-60px; right:-60px; width:240px; height:240px; border-radius:50%; background:rgba(255,255,255,0.05); }
+.contact::after  { content:''; position:absolute; bottom:-40px; left:-40px; width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,0.03); }
+.contact-content { text-align:center; position:relative; z-index:1; }
+.contact-title { font-family:'Cormorant Garamond',serif; font-size:clamp(36px,10vw,52px); font-weight:300; color:var(--white); line-height:1.1; margin-bottom:14px; }
+.contact-title em { font-style:italic; color:var(--rose); }
+.contact-sub     { font-size:14px; font-weight:300; color:rgba(255,252,250,0.7); margin-bottom:32px; line-height:1.7; }
+.contact-actions { display:flex; flex-direction:column; gap:12px; align-items:center; }
+.contact-channels{ display:flex; justify-content:center; gap:16px; margin-top:28px; }
+.contact-channel { display:flex; flex-direction:column; align-items:center; gap:6px; color:rgba(255,252,250,0.7); transition:var(--transition); }
+.contact-channel:hover { color:var(--white); }
+.contact-channel-icon { width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; transition:background var(--transition); }
+.contact-channel:hover .contact-channel-icon { background:rgba(255,255,255,0.2); }
+.contact-channel-label { font-size:11px; letter-spacing:0.05em; }
+
+/* ── FOOTER ── */
+footer { background:var(--text-dark); padding:48px 20px 32px; text-align:center; }
+.footer-logo-img { height:50px; width:auto; object-fit:contain; margin-bottom:8px; filter:brightness(0) invert(1) opacity(0.8); }
+.footer-logo { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:300; color:var(--cream); letter-spacing:0.04em; margin-bottom:4px; }
+.footer-tag  { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-light); margin-bottom:24px; }
+.footer-links{ display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-bottom:24px; }
+.footer-link { font-size:12px; color:rgba(250,245,239,0.5); cursor:pointer; transition:color 0.3s; letter-spacing:0.05em; }
+.footer-link:hover { color:var(--cream); }
+.footer-copy { font-size:11px; color:rgba(250,245,239,0.25); line-height:1.8; }
+
+/* ── TOAST ── */
+.toast {
+  position:fixed; bottom:100px; left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--choco); color:var(--white);
+  padding:12px 24px; border-radius:100px;
+  font-size:13px; font-weight:500; z-index:3000; opacity:0; pointer-events:none;
+  transition:all 0.4s var(--spring); white-space:nowrap;
+  box-shadow:0 8px 32px rgba(58,42,36,0.3);
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ── MODAL ── */
+.modal-overlay { position:fixed; inset:0; background:rgba(58,42,36,0.6); z-index:1500; opacity:0; pointer-events:none; transition:opacity 0.3s; backdrop-filter:blur(6px); }
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal-sheet {
+  position:fixed; bottom:0; left:0; right:0; max-height:90vh;
+  background:var(--white); border-radius:var(--radius-xl) var(--radius-xl) 0 0; z-index:1600;
+  transform:translateY(100%); transition:transform 0.4s var(--ease); overflow-y:auto;
+  padding-bottom:env(safe-area-inset-bottom,20px);
+}
+.modal-sheet.open { transform:translateY(0); }
+.modal-handle { width:40px; height:4px; background:var(--cream-dark); border-radius:2px; margin:12px auto 0; }
+.modal-body   { padding:20px 20px 32px; }
+
+/* ── FLOATING CART ── */
+.float-cart {
+  display:none; position:fixed; bottom:24px; right:20px; z-index:900;
+  background:linear-gradient(135deg,var(--choco),var(--choco-light));
+  color:var(--white); border:none; border-radius:100px; padding:14px 22px;
+  font-size:13px; font-weight:500;
+  box-shadow:0 8px 32px rgba(122,80,58,0.4); transition:0.5s var(--spring);
+  align-items:center; gap:10px;
+}
+.float-cart.visible { display:flex; }
+.float-cart:hover   { transform:translateY(-3px); box-shadow:0 12px 40px rgba(122,80,58,0.5); }
+.float-cart:active  { transform:scale(0.96); }
+.float-cart-total   { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:600; }
+
+@media (max-width:360px) {
+  .pcard-fields-row { grid-template-columns:1fr; }
+  .pcard-includes   { grid-template-columns:1fr; }
+  .kit-options      { gap:6px; }
+  .pcard-massa-options { flex-direction:column; }
+}
+@media (min-width:600px) {
+  .float-cart { display:none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <a href="#home" class="nav-logo">
+    <img
+      class="nav-logo-img"
+      src="LOGO.jpeg"
+      alt="Kelin Cakes"
+      onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
+    <span id="logoFallback" style="display:none; align-items:center; gap:8px;">
+      <svg class="nav-logo-icon" width="26" height="26" viewBox="0 0 32 32" fill="none">
+        <path d="M16 4C10 4 6 9 6 14c0 4 2 7 5 9l5 5 5-5c3-2 5-5 5-9 0-5-4-10-10-10z" fill="var(--rose)" stroke="var(--choco)" stroke-width="1.5"/>
+        <path d="M10 14c0-3.3 2.7-6 6-6" stroke="var(--white)" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+      </svg>
+      Kelin Cakes
+    </span>
+  </a>
+  <div class="nav-actions">
+    <button class="nav-cart" onclick="openCart()" aria-label="Abrir carrinho">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--choco)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-logo-wrap" id="heroLogoWrap">
+      <img
+        class="hero-logo-img"
+        src="./LOGO.jpeg"
+        alt="Kelin Cakes"
+        onerror="this.parentElement.style.display='none';">
+    </div>
+    <div class="hero-tag">✦ Confeitaria Artesanal Premium</div>
+    <h1 class="hero-title display">Kelin<br><em>Cakes</em></h1>
+    <p class="hero-sub">Cada bolo conta uma história de carinho, sabor e memórias que ficam para sempre.</p>
+    <div class="hero-ctas">
+      <a href="#catalogo" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/></svg>
+        Ver Catálogo
+      </a>
+      <a href="#como-funciona" class="btn btn-outline">Como funciona</a>
+    </div>
+  </div>
+</section>
+
+<!-- CATÁLOGO -->
+<section class="section section-bg-white" id="catalogo">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">✦ Cardápio</span>
+      <h2 class="section-title display">Nossos Produtos</h2>
+      <div class="divider"></div>
+      <p class="section-sub">Feito com amor e ingredientes selecionados para cada ocasião especial</p>
+    </div>
+
+    <div class="catalog-filters reveal">
+      <button class="filter-btn active" onclick="filterProducts('todos',this)">✨ Todos</button>
+      <button class="filter-btn" onclick="filterProducts('bolos-tradicionais',this)">🍰 Tradicionais</button>
+      <button class="filter-btn" onclick="filterProducts('bolos-especiais',this)">🎂 Especiais</button>
+      <button class="filter-btn" onclick="filterProducts('bolos-caseirinhos',this)">🏡 Caseirinhos</button>
+      <button class="filter-btn" onclick="filterProducts('festa',this)">🎁 Festa na Caixa</button>
+      <button class="filter-btn" onclick="filterProducts('buques',this)">💐 Buquês</button>
+      <button class="filter-btn" onclick="filterProducts('doces',this)">🍬 Doces</button>
+      <button class="filter-btn" onclick="filterProducts('donuts',this)">🍩 Mini Donuts</button>
+      <button class="filter-btn" onclick="filterProducts('kits',this)">🎉 Kits Festa</button>
+      <button class="filter-btn" onclick="filterProducts('sobremesas',this)">🍮 Sobremesas</button>
+      <button class="filter-btn" onclick="filterProducts('lanches',this)">🍔 Lanches</button>
+    </div>
+
+    <div class="products-list" id="productsGrid"></div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="section section-bg-rose" id="como-funciona">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">✦ Processo</span>
+      <h2 class="section-title display">Como Funciona</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="steps-list">
+      <div class="step-item reveal">
+        <div class="step-num">1</div>
+        <div>
+          <h3 class="step-title">Escolha seus produtos</h3>
+          <p class="step-desc">Navegue pelo catálogo, escolha sabores e personalizações e adicione ao carrinho.</p>
+        </div>
+      </div>
+      <div class="step-item reveal reveal-delay-1">
+        <div class="step-num">2</div>
+        <div>
+          <h3 class="step-title">Finalize seu pedido</h3>
+          <p class="step-desc">Preencha seus dados, escolha retirada ou entrega e deixe observações com detalhes.</p>
+        </div>
+      </div>
+      <div class="step-item reveal reveal-delay-2">
+        <div class="step-num">3</div>
+        <div>
+          <h3 class="step-title">Pague 50% de entrada</h3>
+          <p class="step-desc">Realize o pagamento da entrada via Pix para confirmar sua encomenda com segurança.</p>
+        </div>
+      </div>
+      <div class="step-item reveal reveal-delay-3">
+        <div class="step-num">4</div>
+        <div>
+          <h3 class="step-title">Aguarde a confirmação</h3>
+          <p class="step-desc">Receba a confirmação pelo WhatsApp e acompanhe sua encomenda com todo o carinho.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="section section-bg-white" id="sobre">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">✦ Nossa História</span>
+      <h2 class="section-title display">Sobre a<br>Kelin Cakes</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="about-content reveal">
+      <div class="about-icon">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--choco)" stroke-width="1.5">
+          <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+        </svg>
+      </div>
+      <p class="about-text">"Cada bolo que sai daqui é feito com a mesma dedicação que eu gostaria de receber."</p>
+      <p class="about-desc">A Kelin Cakes nasceu da paixão por transformar momentos especiais em memórias inesquecíveis. Utilizamos ingredientes premium e técnicas artesanais para criar confeitaria que encanta tanto pelo visual quanto pelo sabor.</p>
+      <div class="about-stats">
+        <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Bolos entregues</span></div>
+        <div class="stat"><span class="stat-num">4.9★</span><span class="stat-label">Avaliação</span></div>
+        <div class="stat"><span class="stat-num">5+</span><span class="stat-label">Anos de amor</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCALIZAÇÃO -->
+<section class="section" id="localizacao" style="background:var(--cream-dark)">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">✦ Onde Estamos</span>
+      <h2 class="section-title display">Localização</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="info-cards-grid reveal">
+      <div class="info-block info-block-full">
+        <span class="info-block-icon">📍</span>
+        <div class="info-block-title">Endereço</div>
+        <div class="info-block-text">Avenida Projetada Guatupe, Guarituba 397<br>Piraquara / PR</div>
+      </div>
+      <div class="info-block">
+        <span class="info-block-icon">🕐</span>
+        <div class="info-block-title">Horários</div>
+        <div class="horario-row"><span class="horario-dia">Seg a Sáb</span><span class="horario-hora">09:00–18:00</span></div>
+        <div class="horario-row"><span class="horario-dia">Domingo</span><span class="horario-hora">09:00–13:00</span></div>
+      </div>
+      <div class="info-block">
+        <span class="info-block-icon">📱</span>
+        <div class="info-block-title">Contato</div>
+        <div class="info-block-text">
+          <a href="https://wa.me/5541999834784" target="_blank" style="color:var(--choco)">(41) 99983-4784</a><br>
+          <a href="https://instagram.com/kelin_cakes" target="_blank" style="color:var(--choco)">@kelin_cakes</a><br>
+          <a href="mailto:kelinbarbosa74@gmail.com" style="color:var(--choco);font-size:11px">kelinbarbosa74@gmail.com</a>
+        </div>
+      </div>
+      <div class="map-wrap info-block-full reveal reveal-delay-1">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3601.2!2d-49.27!3d-25.31!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sAv.+Projetada+Guatupe+397+Guarituba+Colombo+PR!5e0!3m2!1spt!2sbr!4v1"
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Localização Kelin Cakes">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="contact section-bg-dark" id="contato">
+  <div class="container">
+    <div class="contact-content">
+      <h2 class="contact-title display reveal">Vamos criar<br><em>algo especial?</em></h2>
+      <p class="contact-sub reveal">Fale comigo pelo WhatsApp para pedidos personalizados e dúvidas</p>
+      <div class="contact-actions reveal">
+        <a href="https://wa.me/5541999834784?text=Olá%2C%20vim%20pelo%20site%20e%20gostaria%20de%20fazer%20um%20pedido!" target="_blank" class="btn btn-wpp">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Falar no WhatsApp
+        </a>
+        <a href="https://wa.me/5541999834784?text=Olá%2C%20tenho%20uma%20dúvida!" target="_blank" class="btn btn-wpp-outline">Tirar dúvidas</a>
+      </div>
+      <div class="contact-channels">
+        <a href="https://wa.me/5541999834784" target="_blank" class="contact-channel">
+          <div class="contact-channel-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          </div>
+          <span class="contact-channel-label">WhatsApp</span>
+        </a>
+        <a href="https://instagram.com/kelin_cakes" target="_blank" class="contact-channel">
+          <div class="contact-channel-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <span class="contact-channel-label">Instagram</span>
+        </a>
+        <a href="mailto:kelinbarbosa74@gmail.com" class="contact-channel">
+          <div class="contact-channel-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <span class="contact-channel-label">E-mail</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img
+    class="footer-logo-img"
+    src="./LOGO.jpeg"
+    alt="Kelin Cakes"
+    onerror="this.style.display='none'; document.getElementById('footerLogoFallback').style.display='block';">
+  <div id="footerLogoFallback" class="footer-logo" style="display:none">Kelin Cakes</div>
+  <div class="footer-tag">Confeitaria Artesanal Premium</div>
+  <div class="footer-links">
+    <span class="footer-link" onclick="scrollToSection('home')">Início</span>
+    <span class="footer-link" onclick="scrollToSection('catalogo')">Catálogo</span>
+    <span class="footer-link" onclick="scrollToSection('como-funciona')">Como Funciona</span>
+    <span class="footer-link" onclick="scrollToSection('sobre')">Sobre</span>
+    <span class="footer-link" onclick="scrollToSection('localizacao')">Localização</span>
+    <span class="footer-link" onclick="scrollToSection('contato')">Contato</span>
+  </div>
+  <div class="footer-copy">
+    © 2025 Kelin Cakes · Todos os direitos reservados<br>
+    <span style="color:rgba(250,245,239,0.2);font-size:10px">📍 Av. Projetada Guatupe, Guarituba 397 · (41) 99983-4784</span>
+  </div>
+</footer>
+
+<!-- CARRINHO -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2 class="cart-title display">Carrinho</h2>
+    <button class="cart-close" onclick="closeCart()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty" id="cartEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <span>Seu carrinho está vazio</span>
+      <span style="font-size:12px">Adicione produtos para continuar</span>
+    </div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-subtotal">
+      <span class="cart-subtotal-label">Total</span>
+      <span class="cart-subtotal-value" id="cartTotal">R$ 0,00</span>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="goToCheckout()">
+      Finalizar Pedido
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- CHECKOUT -->
+<div class="screen" id="checkoutScreen">
+  <div class="screen-header">
+    <button class="screen-back" onclick="closeScreen('checkoutScreen')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <h2 class="screen-title display">Finalizar Pedido</h2>
+  </div>
+  <div class="screen-body">
+    <div class="step-counter">
+      <div class="step-dot active" id="step1dot">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot pending" id="step2dot">2</div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-dot pending" id="step3dot">3</div>
+    </div>
+    <div id="checkoutStep1">
+      <div class="form-group">
+        <label class="form-label" for="custName">Nome completo</label>
+        <input type="text" id="custName" class="form-input" placeholder="Seu nome" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="custPhone">Telefone / WhatsApp</label>
+        <input type="tel" id="custPhone" class="form-input" placeholder="(00) 00000-0000" autocomplete="tel">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Forma de recebimento</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="delivery" value="retirada" id="deliveryRetirada" checked>
+            <span class="radio-label">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span>Retirada</span>
+            </span>
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="delivery" value="entrega" id="deliveryEntrega">
+            <span class="radio-label">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              <span>Entrega</span>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group" id="addressGroup" style="display:none">
+        <label class="form-label" for="custAddress">Endereço completo</label>
+        <textarea id="custAddress" class="form-input" placeholder="Rua, número, bairro, cidade..."></textarea>
+        <div class="frete-aviso">
+          <span>ℹ️</span>
+          <span>Para pedidos com entrega, o valor do frete será informado pelo WhatsApp antes da confirmação.</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="custObs">Observações do pedido</label>
+        <textarea id="custObs" class="form-input" placeholder="Ex: sabor do recheio, mensagem para escrever, detalhes de decoração..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="goToStep2()">
+        Continuar
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div id="checkoutStep2" style="display:none">
+      <div class="order-summary" id="orderSummaryBox">
+        <div class="order-summary-header"><h3 class="order-summary-title">Resumo do Pedido</h3></div>
+        <div class="order-summary-items" id="orderSummaryItems"></div>
+        <div class="order-sum-total">
+          <span class="order-sum-total-label">Total</span>
+          <span class="order-sum-total-val" id="orderSummaryTotal">R$ 0,00</span>
+        </div>
+      </div>
+      <div class="info-card" id="customerInfoCard">
+        <div class="info-card-title">Dados do pedido</div>
+        <div class="info-row"><span class="info-row-label">Nome</span><span class="info-row-value" id="summaryName">—</span></div>
+        <div class="info-row"><span class="info-row-label">Telefone</span><span class="info-row-value" id="summaryPhone">—</span></div>
+        <div class="info-row"><span class="info-row-label">Entrega</span><span class="info-row-value" id="summaryDelivery">—</span></div>
+        <div class="info-row" id="summaryAddressRow" style="display:none">
+          <span class="info-row-label">Endereço</span>
+          <span class="info-row-value" id="summaryAddress">—</span>
+        </div>
+        <div class="info-row" id="summaryObsRow" style="display:none">
+          <span class="info-row-label">Obs.</span>
+          <span class="info-row-value" id="summaryObs">—</span>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="goToPayment()">
+        Ir para Pagamento
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <button class="btn btn-outline btn-full" onclick="backToStep1()" style="margin-top:10px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Editar dados
+      </button>
+    </div>
+    <div id="checkoutStep3" style="display:none">
+      <div class="payment-box">
+        <h3 class="payment-title">Pagamento via Pix</h3>
+        <p class="payment-sub">Pague 50% agora para confirmar sua encomenda</p>
+        <div class="payment-amounts">
+          <div class="amount-card total">
+            <div class="amount-card-label">Total do pedido</div>
+            <div class="amount-card-value" id="paymentTotal">R$ 0,00</div>
+          </div>
+          <div class="amount-card entrada">
+            <div class="amount-card-label">Entrada (50%)</div>
+            <div class="amount-card-value" id="paymentEntrada">R$ 0,00</div>
+          </div>
+        </div>
+        <div class="qr-wrap" id="qrWrap"></div>
+        <div class="pix-key-row">
+          <div>
+            <div class="pix-key-label">Chave Pix (CPF)</div>
+            <div class="pix-key-value" id="pixKeyDisplay"></div>
+          </div>
+        </div>
+        <div id="copyFeedback" class="copy-feedback">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          Chave copiada!
+        </div>
+        <button class="btn btn-primary btn-full" onclick="copyPix()" style="margin-bottom:12px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copiar Chave Pix
+        </button>
+      </div>
+      <button class="btn btn-wpp btn-full" onclick="sendComprovante()" style="margin-bottom:12px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Enviar Comprovante no WhatsApp
+      </button>
+      <button class="btn btn-primary btn-full" onclick="goToConfirmation()">
+        Confirmar Pagamento
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRMAÇÃO -->
+<div class="screen" id="confirmationScreen">
+  <div class="screen-header">
+    <button class="screen-back" onclick="closeScreen('confirmationScreen');resetAll()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    </button>
+    <h2 class="screen-title display">Pedido Confirmado!</h2>
+  </div>
+  <div class="screen-body" style="text-align:center">
+    <div class="confirmation-icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <p class="section-title display" style="margin-bottom:8px">Obrigada! 🎂</p>
+    <p style="font-size:14px;color:var(--text-mid);margin-bottom:28px;line-height:1.7">
+      Seu pedido foi recebido com muito carinho.<br>Aguarde a confirmação pelo WhatsApp!
+    </p>
+    <div id="confirmSummary" style="margin-bottom:28px;text-align:left"></div>
+    <a id="wppConfirmLink" href="#" target="_blank" class="btn btn-wpp btn-full" style="margin-bottom:12px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      Enviar Pedido pelo WhatsApp
+    </a>
+    <button class="btn btn-outline btn-full" onclick="closeScreen('confirmationScreen');resetAll()">Fazer novo pedido</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+<div class="modal-sheet" id="modalSheet">
+  <div class="modal-handle"></div>
+  <div class="modal-body" id="modalBody"></div>
+</div>
+
+<!-- FLOATING CART -->
+<button class="float-cart" id="floatCart" onclick="openCart()">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+  <span>Carrinho</span>
+  <span class="float-cart-total" id="floatCartTotal">R$ 0,00</span>
+</button>
+
+<script>
+/* ============================================================
+   CONFIGURAÇÕES
+   ============================================================ */
+const CONFIG = {
+  whatsapp:    '5541999834784',
+  pixKey:      '107.981.399-35',
+  pixName:     'KELIN CAKES',
+  entrancePct: 0.5,
+
+  extras: {
+    caixa:  { label: 'Caixa de Transporte', desc: 'Protege seu bolo na entrega', price: 7 },
+    topper: { label: 'Topper Personalizado', desc: 'Decoração personalizada no topo do bolo', price: 20 }
+  },
+
+  kits: [
+    { id:'kit-1', name:'Só Um Bolinho', price:175, pessoas:'—',
+      includes:['Topo de bolo','1 kg de bolo','25 docinhos','35 salgados','3 cup cakes','1 refrigerante','Vela'] },
+    { id:'kit-6', name:'Kit 6 Pessoas', price:195, pessoas:'6',
+      includes:['Topo de bolo','1 kg de bolo','30 docinhos','50 salgados','4 cup cakes','1 refrigerante','Vela'] },
+    { id:'kit-10', name:'Kit 10 Pessoas', price:315, pessoas:'10',
+      includes:['Topo de bolo','1,5 kg de bolo','50 docinhos','100 salgados','6 cup cakes','2 refrigerantes','Vela'] },
+    { id:'kit-15', name:'Kit 15 Pessoas', price:415, pessoas:'15',
+      includes:['Topo de bolo','2 kg de bolo','100 docinhos','140 salgados','8 cup cakes','2 refrigerantes','Vela'] },
+    { id:'kit-20', name:'Kit 20 Pessoas', price:520, pessoas:'20',
+      includes:['Topo de bolo','2,5 kg de bolo','150 docinhos','200 salgados','10 cup cakes','3 refrigerantes','Vela'] },
+    { id:'kit-30', name:'Kit 30 Pessoas', price:650, pessoas:'30',
+      includes:['Topo de bolo','3 kg de bolo','200 docinhos','250 salgados','12 cup cakes','4 refrigerantes','Vela'] },
+    { id:'kit-40', name:'Kit 40 Pessoas', price:780, pessoas:'40',
+      includes:['Topo de bolo','3,5 kg de bolo','250 docinhos','350 salgados','14 cup cakes','5 refrigerantes','Vela'] },
+    { id:'kit-45', name:'Kit 45 Pessoas', price:880, pessoas:'45',
+      includes:['Topo de bolo','4 kg de bolo','300 docinhos','400 salgados','14 cup cakes','6 refrigerantes','Vela'] },
+    { id:'kit-50', name:'Kit 50 Pessoas', price:950, pessoas:'50',
+      includes:['Topo de bolo','5 kg de bolo','350 docinhos','500 salgados','18 cup cakes','7 refrigerantes','Vela'] },
+    { id:'kit-60', name:'Kit 60 Pessoas', price:1100, pessoas:'60',
+      includes:['Topo de bolo','6 kg de bolo','380 docinhos','580 salgados','20 cup cakes','8 refrigerantes','Vela'] },
+  ],
+
+  products: [
+
+    /* ════════════════════════════════
+       BOLOS TRADICIONAIS — R$ 70/kg
+    ════════════════════════════════ */
+    {
+      id: 'bolo-tradicional',
+      category: 'bolos-tradicionais',
+      type: 'bolo-card',
+      name: 'Bolo Tradicional',
+      emoji: '🎂',
+      badge: 'R$ 70 / kg',
+      precoKg: 70,
+      images: [
+        { src: './BOLO TRADICIONAL.jpeg', alt: 'Bolo Tradicional — foto principal (frente do bolo)' },
+        { src: './BOLO MODELO 2.jpeg',    alt: 'Bolo Tradicional sabor Ninho' },
+        { src: './BOLO MODELO 6.jpeg',    alt: 'Bolo Tradicional sabor Dois Amores' },
+      ],
+      sabores: ['Brigadeiro de maracujá','Ninho','Doce de leite com coco','Ninho com amendoim','Brigadeiro','Prestígio','Beijinho','4 Leites','2 Amores'],
+      massas: ['Massa branca', 'Massa de chocolate'],
+      desc: 'Bolos artesanais com recheios cremosos. Escolha o sabor, o peso e personalize as cores e decoração. Valor: R$ 70,00 por kg.',
+      campos: [
+        { id: 'corPrincipal',  label: 'Cor principal',  placeholder: 'Ex: rosa claro, branco, dourado...' },
+        { id: 'corSecundaria', label: 'Cor secundária', placeholder: 'Ex: lilás, verde menta, champagne...' }
+      ],
+      campoObs: { id: 'obsTradicional', label: 'Sabores e observações', placeholder: 'Ex: mensagem para escrever, detalhes da decoração, tema...' },
+      temExtras: true
+    },
+
+    /* ════════════════════════════════
+       BOLOS ESPECIAIS — R$ 100/kg
+    ════════════════════════════════ */
+    {
+      id: 'bolo-especial',
+      category: 'bolos-especiais',
+      type: 'bolo-card',
+      name: 'Bolo Especial',
+      emoji: '✨',
+      badge: 'R$ 110 / kg',
+      precoKg: 110,
+      images: [
+        { src: './BOLO MODELO 4.jpeg', alt: 'Bolo Especial Red Velvet — foto principal' },
+        { src: './BOLO MODELO 5.jpeg', alt: 'Bolo Especial sabor Banoffe' },
+        { src: './BOLO MODELO 8.jpeg', alt: 'Bolo Especial sabor Prestígio' },
+        { src: './BOLO MODELO 11.jpeg', alt: 'Bolo Especial sabor Ferrero Rocher' },
+      ],
+      sabores: ['Kitkat','Rafaello','Kinder Bueno','Ferrero Rocher','Nozes com doce de leite','Chocolate meio amargo','Ninho com nutella','Laka com oreo','Sonho de valsa','Ouro branco','Alpino'],
+      massas: ['Massa branca', 'Massa de chocolate'],
+      desc: 'Bolos premium com ingredientes nobres. Personalize cores e decoração. Valor: R$ 110,00 por kg.',
+      campos: [
+        { id: 'corPrincipalEsp',  label: 'Cor principal',  placeholder: 'Ex: vinho, off-white, dourado...' },
+        { id: 'corSecundariaEsp', label: 'Cor secundária', placeholder: 'Ex: rosê, prata, nude...' }
+      ],
+      campoObs: { id: 'obsEspecial', label: 'Sabores e observações', placeholder: 'Ex: mensagem para escrever, detalhes, tema especial...' },
+      temExtras: true
+    },
+
+    /* ════════════════════════════════
+       BOLOS DE FRUTAS — R$ 95/kg
+    ════════════════════════════════ */
+    {
+      id: 'bolo-de-frutas',
+      category: 'bolos-de-frutas',
+      type: 'bolo-card',
+      name: 'Bolo de Frutas',
+      emoji: '✨',
+      badge: 'R$ 95 / kg',
+      precoKg: 95,
+      images: [
+        { src: './BOLO DE FRUTAS.jpeg', alt: 'Bolo de Frutas — foto principal' },
+      ],
+      sabores: ['Morango com brigadeiro','Morango com ninho','Morango com nata','Abacaxi com doce de leite','Abacaxi com coco','Pêssego com ninho','Frutas vermelhas','Frutas tropicais'],
+      massas: ['Massa branca', 'Massa de chocolate'],
+      desc: 'Bolos premium com ingredientes nobres. Personalize cores e decoração. Valor: R$ 95,00 por kg.',
+      campos: [
+        { id: 'corPrincipalEsp',  label: 'Cor principal',  placeholder: 'Ex: vinho, off-white, dourado...' },
+        { id: 'corSecundariaEsp', label: 'Cor secundária', placeholder: 'Ex: rosê, prata, nude...' }
+      ],
+      campoObs: { id: 'obsEspecial', label: 'Sabores e observações', placeholder: 'Ex: mensagem para escrever, detalhes, tema especial...' },
+      temExtras: true
+    },
+
+    /* ════════════════════════════════
+       BOLO CASEIRINHO — R$ 35 / R$ 65
+    ════════════════════════════════ */
+    {
+      id: 'bolo-caseirinho',
+      category: 'bolos-caseirinhos',
+      type: 'bolo-caseirinho-card',
+      name: 'Bolo Caseirinho',
+      emoji: '🏡',
+      badge: 'A partir de R$ 35',
+      badgeType: 'new',
+      precoSemRecheio: 35,
+      precoComRecheio: 65,
+      images: [
+        { src: './BOLO CASEIRO.jpeg', alt: 'Bolo Caseirinho — foto principal' },
+      ],
+      sabores: ['Chocolate','Cenoura','Laranja','Limão','Fubá'],
+      recheios: ['Sem recheio','Brigadeiro','Goiabada','Limão','Ninho'],
+      desc: 'Bolos caseiros feitos com carinho. Sem recheio: R$ 35,00 · Com recheio: R$ 65,00.',
+      campoObs: { id: 'obsCaseirinho', label: 'Observações', placeholder: 'Ex: mensagem para escrever, tamanho desejado, decoração simples...' },
+      temExtras: true
+    },
+
+    /* ════════════════════════════════
+       FESTA NA CAIXA — R$ 165
+    ════════════════════════════════ */
+    {
+      id: 'festa1',
+      category: 'festa',
+      type: 'rich-card',
+      cardStyle: 'festa',
+      name: 'Festa na Caixa',
+      emoji: '🎁',
+      badge: 'Completo',
+      badgeType: 'new',
+      price: 165,
+      priceLabel: 'pacote',
+      desc: 'O pacote completo para sua festa em uma linda caixa personalizada com foto ou tema, pronto para comemorar!',
+      images: [
+        { src: './FESTA NA CAIXA.png', alt: 'Festa na Caixa — caixa montada, foto frontal completa' },
+        { src: './FESTA NA CAIXA 2.png', alt: 'Festa na Caixa — bolo incluso' },
+      ],
+      includes: [
+        '1 kg de bolo',
+        '12 salgados',
+        '12 docinhos',
+        'Mini copo da felicidade',
+        '2 Cocas',
+        '2 Taças',
+        'Caixa com foto ou tema'
+      ],
+      campoObs: { id: 'obsFestaCard', label: 'Personalização da caixa', placeholder: 'Ex: fotos para a caixa, nome do aniversariante, tema, cores...' }
+    },
+
+    /* ════════════════════════════════
+       MINI DONUTS — R$ 3/un (mín. 20)
+    ════════════════════════════════ */
+    {
+      id: 'donut1',
+      category: 'donuts',
+      type: 'rich-card',
+      cardStyle: 'donut',
+      name: 'Mini Donuts',
+      emoji: '🍩',
+      badge: 'A partir de 20un',
+      badgeType: 'new',
+      pricePerUnit: 3,
+      minQty: 20,
+      price: 60,
+      priceLabel: 'estimado',
+      desc: 'Mini donuts artesanais com coberturas variadas. Perfeitos para festas, aniversários e eventos. Mínimo de 20 unidades · R$ 3,00/un.',
+      images: [
+        { src: './DONUTS.jpeg', alt: 'Mini Donuts variados — foto principal' },
+        { src: './DONUTS MODELO 2.jpeg', alt: 'Mini Donuts — close nas coberturas coloridas' },
+        { src: './DONUTS MODELO 1.jpeg', alt: 'Mini Donuts em bandeja ou display de festa' }
+      ],
+      campoObs: { id: 'obsDonutCard', label: 'Observações (coberturas, sabores)', placeholder: 'Ex: coberturas preferidas, cores para evento, quantidade exata...' }
+    },
+
+    /* ════════════════════════════════
+       BUQUÊ BORBOLETA — R$ 75
+    ════════════════════════════════ */
+    {
+      id: 'buque1',
+      category: 'buques',
+      type: 'rich-card',
+      cardStyle: 'default',
+      name: 'Buquê Borboleta',
+      emoji: '💐',
+      price: 75,
+      priceLabel: 'unidade',
+      desc: 'Lindo buquê decorativo com borboletas delicadas e flores artesanais. Perfeito para presentear em ocasiões especiais.',
+      images: [
+        { src: './BUQUE BORBOLETA.png', alt: 'Buquê Borboleta — foto frontal completa' },
+        { src: './BUQUE BORBOLETA 2.png', alt: 'Buquê Borboleta — detalhe das borboletas decorativas' },
+      ],
+      campoObs: { id: 'obsBuque1', label: 'Observações', placeholder: 'Ex: cor de preferência, ocasião, mensagem...' }
+    },
+
+    /* ════════════════════════════════
+       BUQUÊ ROSAS ETERNAS — R$ 180
+    ════════════════════════════════ */
+    {
+      id: 'buque2',
+      category: 'buques',
+      type: 'rich-card',
+      cardStyle: 'gold',
+      name: 'Buquê Rosas Eternas',
+      emoji: '🌹',
+      badge: 'Premium',
+      badgeType: 'promo',
+      price: 180,
+      priceLabel: 'unidade',
+      desc: 'Rosas preservadas eternamente, um presente inesquecível para quem você ama. Durabilidade de anos com beleza imutável.',
+      images: [
+        { src: './BUQUE ETERNO.png', alt: 'Buquê Rosas Eternas — foto principal completa' },
+        { src: './BUQUE ETERNO 2.png', alt: 'Buquê Rosas Eternas — close nas rosas preservadas' },
+      ],
+      campoObs: { id: 'obsBuque2', label: 'Observações', placeholder: 'Ex: cor das rosas, embalagem especial, mensagem...' }
+    },
+
+    /* ════════════════════════════════
+       DOCINHOS TRADICIONAIS — R$ 115 (cx 100un)
+    ════════════════════════════════ */
+    {
+      id: 'doce-tradicional',
+      category: 'doces',
+      type: 'rich-card',
+      cardStyle: 'default',
+      name: 'Docinhos Tradicionais',
+      emoji: '🍬',
+      badge: 'Cx 100un',
+      badgeType: '',
+      price: 115,
+      priceLabel: 'caixa 100un',
+      desc: 'Caixa com 100 docinhos finos tradicionais, preparados artesanalmente com ingredientes selecionados. Escolha um ou mais sabores!',
+      images: [
+        { src: './DOCINHOS TRADICIONAL 1.jpeg', alt: 'Docinhos Tradicionais — caixa montada com todos os sabores' },
+        { src: './DOCINHOS TRADICIONAL 3.jpeg', alt: 'Docinhos Tradicionais — close nos docinhos decorados' },
+        { src: './DOCINHOS TRADICIONAL 2.jpeg', alt: 'Docinhos Tradicionais — caixa montada com todos os sabores' },
+      ],
+      sabores: ['Brigadeiro Branco','Brigadeiro Preto','Moranguinho','Beijinho','Paçoca','2 Amores','Ninho'],
+      campoObs: { id: 'obsDoceTrad', label: 'Observações', placeholder: 'Ex: sabores desejados, decoração especial, embalagem para presente...' }
+    },
+
+    /* ════════════════════════════════
+       DOCINHOS GOURMET — R$ 165 (100un)
+    ════════════════════════════════ */
+    {
+      id: 'doce-gourmet',
+      category: 'doces',
+      type: 'rich-card',
+      cardStyle: 'gourmet',
+      name: 'Docinhos Gourmet',
+      emoji: '✨',
+      badge: 'Gourmet',
+      badgeType: 'gourmet',
+      price: 165,
+      priceLabel:  '100un',
+      desc: 'Caixa com 100 docinhos gourmet premium, feitos com ingredientes nobres. Uma experiência de sabor incomparável!',
+      images: [
+        { src: './DOCINHOS MODELO 2.jpeg', alt: 'Docinhos Gourmet — caixa montada com todos os sabores' },
+        { src: './DOCINHO MODELO 5.jpeg', alt: 'Docinhos Gourmet — close nos Ferrero Rocher e Kit Kat' },
+        { src: './DOCINHOS MODELO 3.jpeg', alt: 'Docinhos Gourmet — variedade em bandeja elegante' }
+      ],
+      sabores: ['Ninho c/ Nutella','Surpresa de Uva','Romeu e Julieta','Ferrero Rocher','Maracujá','Kit Kat','Churros','Oreo'],
+      campoObs: { id: 'obsDoceGourmet', label: 'Observações', placeholder: 'Ex: sabores desejados, decoração especial, embalagem premium...' }
+    },
+
+    /* ════════════════════════════════
+       QUADRINHO DE CHOCOLATE — R$ 15
+    ════════════════════════════════ */
+    {
+      id: 'doce2',
+      category: 'doces',
+      type: 'rich-card',
+      cardStyle: 'default',
+      name: 'Quadrinho de Chocolate',
+      emoji: '🍫',
+      price: 15,
+      priceLabel: 'unidade',
+      desc: 'Chocolate artesanal em tabletes decorados com frutas secas e confeitos especiais. Uma experiência premium.',
+      images: [
+        { src: './QUADRO.png', alt: 'Quadrinho de Chocolate — tablete decorado, foto principal' },
+        { src: './QUADRO MODELO 1.png', alt: 'Quadrinho de Chocolate — close nas frutas secas e confeitos' }
+      ],
+      campoObs: { id: 'obsDoce2', label: 'Observações', placeholder: 'Ex: tipo de chocolate (ao leite/branco/meio amargo), decoração...' }
+    },
+
+    /* ════════════════════════════════
+       MAÇÃ DECORADA — R$ 15
+    ════════════════════════════════ */
+    {
+      id: 'doce3',
+      category: 'doces',
+      type: 'rich-card',
+      cardStyle: 'default',
+      name: 'Maçã Decorada',
+      emoji: '🍎',
+      badge: 'Novo',
+      badgeType: 'new',
+      price: 15,
+      priceLabel: 'unidade',
+      desc: 'Maçã caramelizada com cobertura especial de chocolate e confeitos coloridos. Deliciosa e linda para presentear.',
+      images: [
+        { src: './MACA DECORADA.jpeg', alt: 'Maçã Decorada com chocolate — foto principal' },
+      ],
+      campoObs: { id: 'obsDoce3', label: 'Observações', placeholder: 'Ex: cobertura preferida, quantidade, embalagem...' }
+    },
+
+    /* ════════════════════════════════
+       COPINHO DA FELICIDADE — R$ 230/cento
+    ════════════════════════════════ */
+    {
+      id: 'sobre1',
+      category: 'sobremesas',
+      type: 'rich-card',
+      cardStyle: 'default',
+      name: 'Copinho da Felicidade',
+      emoji: '🍮',
+      price: 230,
+      priceLabel: 'cento (100un)',
+      desc: 'Sobremesas artesanais em copinho individual, com camadas cremosas. Perfeito para festas e eventos. R$ 230,00 o cento (100 unidades).',
+      images: [
+        { src: './DOCINHO NO COPO.jpeg', alt: 'Copinho da Felicidade em fileira — foto principal' },
+        { src: './DOCINHO NO COPO MODELO 1.jpeg', alt: 'Copinho da Felicidade — close nas camadas internas' }
+      ],
+      campoObs: { id: 'obsSobre1', label: 'Observações', placeholder: 'Ex: sabores desejados, quantidade, data do evento, para presente...' }
+    },
+
+    /* ════════════════════════════════
+       MINI X SALADA — PROMOÇÃO
+       R$ 280 → R$ 260 o cento
+    ════════════════════════════════ */
+    {
+      id: 'mini-x-salada',
+      category: 'lanches',
+      type: 'rich-card',
+      cardStyle: 'promo',
+      name: 'Mini X Salada',
+      emoji: '🍔',
+      badge: '🔥 PROMOÇÃO',
+      badgeType: 'oferta',
+      price: 260,
+      priceLabel: 'cento (100un)',
+      priceOld: 280,
+      desc: 'Mini X Saladas artesanais no cento! Cada um vem com pão, queijo, presunto, tomate, alface e hambúrguer. Perfeitos para festas e eventos. Promoção: de R$ 280 por R$ 260 o cento.',
+      images: [
+        { src: './MINI X SALADA.jpeg', alt: 'Mini X Salada em bandeja — foto principal' },
+        { src: './MINI X SALADA MODELO 2.jpeg', alt: 'Mini X Salada aberto mostrando os ingredientes' },
+      ],
+      includes: ['Pão artesanal','Queijo','Presunto','Tomate','Alface','Hambúrguer'],
+      campoObs: { id: 'obsMiniX', label: 'Observações', placeholder: 'Ex: retirar algum ingrediente, data do evento, entrega...' }
+    },
+
+    /* ════════════════════════════════
+       KIT FESTA — SELETOR DINÂMICO
+    ════════════════════════════════ */
+    {
+      id: 'kit-festa-principal',
+      category: 'kits',
+      type: 'kit-card',
+      name: 'Kit Festa',
+      emoji: '🎉',
+      desc: 'Escolha o kit ideal para o número de convidados. Cada kit inclui topo de bolo, vela e muito mais! o kit acompanha refrigrantes de marca como: Coca, Fanta Laranja/Uva, Guaraná, Sprait, Kuat.',
+      images: [
+        { src: './BOLO MODELO 10.jpeg', alt: 'Kit Festa completo montado na mesa — foto principal' },
+        { src: './BOLO MODELO 13.jpeg', alt: 'Kit Festa — itens separados em flat lay' },
+        { src: './SALGADO MODELO 2.jpeg', alt: 'Kit Festa — mesa posta decorada' },
+        { src: './SALGADO MODELO 1.jpeg', alt: 'Kit Festa — bolo, docinhos e salgados juntos' },
+      ],
+      saborBolo: ['Brigadeiro de Doce de Leite','Brigadeiro de Maracujá','Abacaxi com Coco','Brigadeiro','Prestígio','2 Amores','4 Leites','Ninho'],
+      saborDoce: ['Brigadeiro Branco','Brigadeiro Preto','Moranguinho','2 Amores','Beijinho','Paçoca','Ninho'],
+      saborSalg: ['Risole de Carne','Risole de Pizza','Coxinha','Queijo','Quibe','Vina'],
+      campoObs:  { id: 'obsKitFesta', label: 'Observações e personalização', placeholder: 'Ex: tema, nome do aniversariante, cores, data do evento...' }
+    }
+  ]
+};
+
+/* ── Estado ── */
+let cart = [];
+let currentStep = 1;
+const extrasState = {};
+let selectedKitId = null;
+
+/* ── Helpers ── */
+const fmt = v => 'R$ ' + v.toFixed(2).replace('.', ',');
+const cartTotal = () => cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+function showToast(msg, icon = '✦') {
+  const t = document.getElementById('toast');
+  t.innerHTML = `<span>${icon}</span> ${msg}`;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+function scrollToSection(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior:'smooth' });
+}
+
+/* ============================================================
+   GALERIA INTERNA — DRAG/SWIPE
+   ============================================================ */
+function initGallery(galleryEl) {
+  if (!galleryEl) return;
+  const track    = galleryEl.querySelector('.pcard-gallery-track');
+  const slides   = galleryEl.querySelectorAll('.pcard-slide');
+  const dotsWrap = galleryEl.parentElement.querySelector('.pcard-dots');
+  const prevBtn  = galleryEl.querySelector('.pcard-nav-prev');
+  const nextBtn  = galleryEl.querySelector('.pcard-nav-next');
+  if (!track || slides.length === 0) return;
+  let currentIndex = 0;
+  const total = slides.length;
+  if (dotsWrap) {
+    dotsWrap.innerHTML = '';
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'pcard-dot' + (i === 0 ? ' active' : '');
+      dotsWrap.appendChild(dot);
+    });
+  }
+  function goTo(idx) {
+    currentIndex = Math.max(0, Math.min(total - 1, idx));
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    if (dotsWrap) {
+      dotsWrap.querySelectorAll('.pcard-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === currentIndex);
+      });
+    }
+  }
+  if (prevBtn) prevBtn.addEventListener('click', e => { e.stopPropagation(); goTo(currentIndex - 1); });
+  if (nextBtn) nextBtn.addEventListener('click', e => { e.stopPropagation(); goTo(currentIndex + 1); });
+  let startX = 0, startY = 0, isDragging = false;
+  const threshold = 40;
+  galleryEl.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; isDragging = true; track.classList.add('dragging'); }, { passive: true });
+  galleryEl.addEventListener('touchmove', e => { if (!isDragging) return; const dx = e.touches[0].clientX - startX; const dy = e.touches[0].clientY - startY; if (Math.abs(dx) > Math.abs(dy) + 10) e.preventDefault(); }, { passive: false });
+  galleryEl.addEventListener('touchend', e => { if (!isDragging) return; isDragging = false; track.classList.remove('dragging'); const dx = e.changedTouches[0].clientX - startX; if (Math.abs(dx) > threshold) goTo(dx < 0 ? currentIndex + 1 : currentIndex - 1); });
+  galleryEl.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; track.classList.add('dragging'); e.preventDefault(); });
+  window.addEventListener('mouseup', e => { if (!isDragging) return; isDragging = false; track.classList.remove('dragging'); const dx = e.clientX - startX; if (Math.abs(dx) > threshold) goTo(dx < 0 ? currentIndex + 1 : currentIndex - 1); });
+}
+
+/* ── Render galeria ── */
+function buildGalleryHTML(p) {
+  const slidesHTML = p.images.map((img, idx) => `
+    <div class="pcard-slide">
+      <img src="${img.src}" alt="${img.alt}" loading="${idx===0?'eager':'lazy'}"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="pcard-slide-placeholder" style="display:none">
+        <div class="pcard-slide-placeholder-emoji">${p.emoji||'🍰'}</div>
+        <div class="pcard-slide-placeholder-label">${img.alt}</div>
+        <div class="pcard-slide-placeholder-hint">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          ${idx+1}/${p.images.length} · ${img.alt}
+        </div>
+        <span class="pcard-slide-num">${idx+1}/${p.images.length}</span>
+      </div>
+    </div>`).join('');
+  const many = p.images.length > 1;
+
+  let badgeHTML = '';
+  if (p.priceOld) {
+    badgeHTML = `
+      <div class="pcard-badge-stack">
+        <span class="pcard-badge oferta">${p.badge||'🔥 PROMOÇÃO'}</span>
+        <span class="pcard-badge-old">De ${fmt(p.priceOld)}</span>
+      </div>`;
+  } else if (p.badge) {
+    badgeHTML = `<span class="pcard-badge ${p.badgeType||''}">${p.badge}</span>`;
+  }
+
+  return `
+    <div class="pcard-gallery">
+      <div class="pcard-gallery-track">${slidesHTML}</div>
+      ${badgeHTML}
+      ${many ? `
+        <button class="pcard-nav pcard-nav-prev" aria-label="Foto anterior">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="pcard-nav pcard-nav-next" aria-label="Próxima foto">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>` : ''}
+    </div>
+    ${many ? '<div class="pcard-dots"></div>' : ''}`;
+}
+
+function buildObsField(campoObs) {
+  if (!campoObs) return '';
+  return `
+    <div>
+      <span class="pcard-field-label">${campoObs.label}</span>
+      <textarea class="pcard-textarea" id="${campoObs.id}" placeholder="${campoObs.placeholder}"></textarea>
+    </div>`;
+}
+
+function buildMassaSelector(productId, massas) {
+  if (!massas || !massas.length) return '';
+  const icons = {
+    'Massa branca':        '🤍',
+    'Massa de chocolate':  '🍫'
+  };
+  const optionsHTML = massas.map((m, idx) => `
+    <label class="pcard-massa-option">
+      <input type="radio" name="${productId}-massa" value="${m}"${idx === 0 ? ' checked' : ''}>
+      <span class="pcard-massa-option-label">
+        <span class="pcard-massa-radio-dot"></span>
+        <span class="pcard-massa-icon">${icons[m] || '🎂'}</span>
+        <span>${m}</span>
+      </span>
+    </label>`).join('');
+  return `
+    <div class="pcard-massa-selector">
+      <span class="pcard-massa-label">✦ Tipo de massa</span>
+      <div class="pcard-massa-options">
+        ${optionsHTML}
+      </div>
+    </div>`;
+}
+
+function buildSaborSelect(productId, sabores) {
+  if (!sabores || !sabores.length) return '';
+  return `
+    <div>
+      <span class="pcard-field-label">Sabor</span>
+      <select class="pcard-select" id="${productId}-sabor">
+        ${sabores.map(s=>`<option value="${s}">${s}</option>`).join('')}
+      </select>
+    </div>`;
+}
+
+function buildExtrasHTML(productId) {
+  const { caixa, topper } = CONFIG.extras;
+  return `
+    <div class="pcard-extras">
+      <div class="pcard-extras-title">Itens adicionais ao bolo</div>
+      <div class="extra-option" onclick="toggleExtra('${productId}','caixa')">
+        <div class="extra-checkbox" id="${productId}-extra-caixa">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="extra-label">
+          <div class="extra-label-name">📦 ${caixa.label}</div>
+          <div class="extra-label-desc">${caixa.desc}</div>
+        </div>
+        <div class="extra-price">+ ${fmt(caixa.price)}</div>
+      </div>
+      <div class="extra-option" onclick="toggleExtra('${productId}','topper')">
+        <div class="extra-checkbox" id="${productId}-extra-topper">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="extra-label">
+          <div class="extra-label-name">🎂 ${topper.label}</div>
+          <div class="extra-label-desc">${topper.desc}</div>
+        </div>
+        <div class="extra-price">+ ${fmt(topper.price)}</div>
+      </div>
+    </div>`;
+}
+
+function toggleExtra(productId, tipo) {
+  if (!extrasState[productId]) extrasState[productId] = { caixa: false, topper: false };
+  extrasState[productId][tipo] = !extrasState[productId][tipo];
+  const el = document.getElementById(`${productId}-extra-${tipo}`);
+  if (el) el.classList.toggle('checked', extrasState[productId][tipo]);
+  updateBoloPrice(productId);
+  /* Também atualiza o caseirinho se for ele */
+  updateCaseirinhoPrice(productId);
+}
+
+function getExtrasPrice(productId) {
+  if (!extrasState[productId]) return 0;
+  let total = 0;
+  if (extrasState[productId].caixa)  total += CONFIG.extras.caixa.price;
+  if (extrasState[productId].topper) total += CONFIG.extras.topper.price;
+  return total;
+}
+
+function getExtrasDesc(productId) {
+  if (!extrasState[productId]) return '';
+  const parts = [];
+  if (extrasState[productId].caixa)  parts.push('Caixa de Transporte');
+  if (extrasState[productId].topper) parts.push('Topper Personalizado');
+  return parts.length ? ' · Extras: ' + parts.join(' + ') : '';
+}
+
+function buildKgSlider(productId, precoKg) {
+  const minKg = 1, maxKg = 5;
+  return `
+    <div class="pcard-kg-row">
+      <div class="pcard-kg-header">
+        <span class="pcard-kg-label">Peso do bolo</span>
+        <span class="pcard-kg-price-display" id="${productId}-price-display">${fmt(precoKg * minKg)}</span>
+      </div>
+      <div class="pcard-kg-slider-wrap">
+        <span style="font-size:11px;color:var(--text-light)">1kg</span>
+        <input type="range" class="pcard-kg-slider" id="${productId}-kg-slider"
+          min="${minKg}" max="${maxKg}" step="0.5" value="${minKg}"
+          oninput="updateBoloSlider('${productId}',${precoKg},this.value)"
+          style="--val:0%">
+        <span class="pcard-kg-value" id="${productId}-kg-value">1 kg</span>
+      </div>
+      <div class="pcard-kg-note">R$ ${precoKg},00 por kg · arraste para escolher o peso</div>
+    </div>`;
+}
+
+function updateBoloSlider(productId, precoKg, kg) {
+  const slider = document.getElementById(`${productId}-kg-slider`);
+  const min = parseFloat(slider.min), max = parseFloat(slider.max);
+  const pct = ((parseFloat(kg) - min) / (max - min)) * 100;
+  slider.style.setProperty('--val', pct + '%');
+  document.getElementById(`${productId}-kg-value`).textContent = kg + ' kg';
+  updateBoloPrice(productId);
+}
+
+function updateBoloPrice(productId) {
+  const p = CONFIG.products.find(x => x.id === productId);
+  if (!p || !p.precoKg) return;
+  const slider = document.getElementById(`${productId}-kg-slider`);
+  const kg = slider ? parseFloat(slider.value) : 1;
+  const extras = getExtrasPrice(productId);
+  const total = (kg * p.precoKg) + extras;
+  const el = document.getElementById(`${productId}-price-display`);
+  if (el) el.textContent = fmt(total);
+}
+
+function getBoloPrice(productId) {
+  const p = CONFIG.products.find(x => x.id === productId);
+  const slider = document.getElementById(`${productId}-kg-slider`);
+  const kg = slider ? parseFloat(slider.value) : 1;
+  return (kg * (p?.precoKg || 75)) + getExtrasPrice(productId);
+}
+
+function getBoloKg(productId) {
+  const slider = document.getElementById(`${productId}-kg-slider`);
+  return slider ? parseFloat(slider.value) : 1;
+}
+
+/* ============================================================
+   BOLO CASEIRINHO — funções de preço dinâmico por recheio
+   ============================================================ */
+function updateCaseirinhoPrice(productId) {
+  const p = CONFIG.products.find(x => x.id === productId);
+  if (!p || p.type !== 'bolo-caseirinho-card') return;
+  const recheioEl = document.getElementById(`${productId}-recheio`);
+  if (!recheioEl) return;
+  const semRecheio = recheioEl.value === 'Sem recheio';
+  const basePrice  = semRecheio ? p.precoSemRecheio : p.precoComRecheio;
+  const extras     = getExtrasPrice(productId);
+  const total      = basePrice + extras;
+  const dispEl     = document.getElementById(`${productId}-price-display`);
+  if (dispEl) dispEl.textContent = fmt(total);
+}
+
+function getCaseirinhoPrice(productId) {
+  const p = CONFIG.products.find(x => x.id === productId);
+  if (!p) return 0;
+  const recheioEl  = document.getElementById(`${productId}-recheio`);
+  const semRecheio = !recheioEl || recheioEl.value === 'Sem recheio';
+  const basePrice  = semRecheio ? p.precoSemRecheio : p.precoComRecheio;
+  return basePrice + getExtrasPrice(productId);
+}
+
+function renderCaseirinhoCard(p, i) {
+  const slidesHTML = p.images.map((img, idx) => `
+    <div class="pcard-slide">
+      <img src="${img.src}" alt="${img.alt}" loading="${idx===0?'eager':'lazy'}"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="pcard-slide-placeholder" style="display:none">
+        <div class="pcard-slide-placeholder-emoji">${p.emoji}</div>
+        <div class="pcard-slide-placeholder-label">${img.alt}</div>
+        <div class="pcard-slide-placeholder-hint">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          ${idx+1}/${p.images.length}
+        </div>
+        <span class="pcard-slide-num">${idx+1}/${p.images.length}</span>
+      </div>
+    </div>`).join('');
+
+  const saboresHTML = `
+    <div>
+      <span class="pcard-field-label">Sabor</span>
+      <select class="pcard-select" id="${p.id}-sabor">
+        ${p.sabores.map(s=>`<option value="${s}">${s}</option>`).join('')}
+      </select>
+    </div>`;
+
+  const recheioHTML = `
+    <div>
+      <span class="pcard-field-label">Recheio</span>
+      <select class="pcard-select" id="${p.id}-recheio" onchange="updateCaseirinhoPrice('${p.id}')">
+        ${p.recheios.map(r=>`<option value="${r}">${r === 'Sem recheio' ? 'Sem recheio — R$ 35,00' : r + ' — R$ 65,00'}</option>`).join('')}
+      </select>
+    </div>`;
+
+  const obsHTML    = buildObsField(p.campoObs);
+  const extrasHTML = p.temExtras ? buildExtrasHTML(p.id) : '';
+
+  const badgeHTML  = p.badge ? `<span class="pcard-badge ${p.badgeType||''}">${p.badge}</span>` : '';
+
+  return `
+    <div class="pcard reveal" style="transition-delay:${i*0.06}s">
+      <div class="pcard-gallery">
+        <div class="pcard-gallery-track">${slidesHTML}</div>
+        ${badgeHTML}
+        ${p.images.length > 1 ? `
+          <button class="pcard-nav pcard-nav-prev">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="pcard-nav pcard-nav-next">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+          </button>` : ''}
+      </div>
+      ${p.images.length > 1 ? '<div class="pcard-dots"></div>' : ''}
+      <div class="pcard-body">
+        <div class="pcard-top">
+          <div class="pcard-name">${p.name}</div>
+          <div class="pcard-price">
+            <span id="${p.id}-price-display">${fmt(p.precoSemRecheio)}</span>
+            <small>sem recheio</small>
+          </div>
+        </div>
+        <p class="pcard-desc">${p.desc}</p>
+        <div class="pcard-customize">
+          ${saboresHTML}
+          ${recheioHTML}
+          ${obsHTML}
+        </div>
+        ${extrasHTML}
+        <button class="btn btn-primary btn-full" onclick="addCaseirinhoToCart('${p.id}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar ao Carrinho
+        </button>
+      </div>
+    </div>`;
+}
+
+function addCaseirinhoToCart(productId) {
+  const p = CONFIG.products.find(x => x.id === productId);
+  if (!p) return;
+  const saborEl   = document.getElementById(`${productId}-sabor`);
+  const recheioEl = document.getElementById(`${productId}-recheio`);
+  const sabor     = saborEl   ? saborEl.value   : '';
+  const recheio   = recheioEl ? recheioEl.value  : 'Sem recheio';
+  const price     = getCaseirinhoPrice(productId);
+
+  let desc = p.name;
+  if (sabor)   desc += ` · Sabor: ${sabor}`;
+  if (recheio) desc += ` · Recheio: ${recheio}`;
+
+  if (p.campoObs) {
+    const obs = document.getElementById(p.campoObs.id)?.value.trim();
+    if (obs) desc += ` · Obs: ${obs}`;
+  }
+  desc += getExtrasDesc(productId);
+
+  addToCart({ id: productId + '-' + Date.now(), name: p.name, desc, price, emoji: p.emoji });
+}
+
+/* ============================================================
+   FILTROS E RENDER
+   ============================================================ */
+function filterProducts(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(cat);
+}
+
+function renderProducts(filter = 'todos') {
+  const grid = document.getElementById('productsGrid');
+  const list = filter === 'todos'
+    ? CONFIG.products
+    : CONFIG.products.filter(p => p.category === filter);
+  grid.innerHTML = list.map((p, i) => {
+    if (p.type === 'bolo-card')             return renderBoloCard(p, i);
+    if (p.type === 'bolo-caseirinho-card')  return renderCaseirinhoCard(p, i);
+    if (p.type === 'rich-card')             return renderRichCard(p, i);
+    if (p.type === 'kit-card')              return renderKitCard(p, i);
+    return '';
+  }).join('');
+  document.querySelectorAll('.pcard-gallery').forEach(g => initGallery(g));
+  document.querySelectorAll('[data-donut-qty]').forEach(el => {
+    const pid = el.dataset.donutQty;
+    updateDonutPrice(pid);
+  });
+  CONFIG.products.filter(p=>p.type==='bolo-card').forEach(p=>{
+    const slider = document.getElementById(`${p.id}-kg-slider`);
+    if (slider) updateBoloSlider(p.id, p.precoKg, slider.value);
+  });
+  initReveal();
+}
+
+/* ── BOLO CARD ── */
+function renderBoloCard(p, i) {
+  const slidesHTML = p.images.map((img, idx) => `
+    <div class="pcard-slide">
+      <img src="${img.src}" alt="${img.alt}" loading="${idx===0?'eager':'lazy'}"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="pcard-slide-placeholder" style="display:none">
+        <div class="pcard-slide-placeholder-emoji">${p.emoji}</div>
+        <div class="pcard-slide-placeholder-label">${img.alt}</div>
+        <div class="pcard-slide-placeholder-hint">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          ${idx+1}/${p.images.length}
+        </div>
+        <span class="pcard-slide-num">${idx+1}/${p.images.length}</span>
+      </div>
+    </div>`).join('');
+
+  const camposHTML = p.campos ? p.campos.map(c=>`
+    <div>
+      <span class="pcard-field-label">${c.label}</span>
+      <input type="text" class="pcard-input" id="${p.id}-${c.id}" placeholder="${c.placeholder}">
+    </div>`).join('') : '';
+
+  const saboresHTML = p.sabores ? `
+    <div>
+      <span class="pcard-field-label">Sabor</span>
+      <select class="pcard-select" id="${p.id}-sabor">
+        ${p.sabores.map(s=>`<option value="${s}">${s}</option>`).join('')}
+      </select>
+    </div>` : '';
+
+  const massaHTML  = p.massas ? buildMassaSelector(p.id, p.massas) : '';
+  const obsHTML    = buildObsField(p.campoObs);
+  const extrasHTML = p.temExtras ? buildExtrasHTML(p.id) : '';
+  const sliderHTML = buildKgSlider(p.id, p.precoKg);
+
+  return `
+    <div class="pcard reveal" style="transition-delay:${i*0.06}s">
+      <div class="pcard-gallery">
+        <div class="pcard-gallery-track">${slidesHTML}</div>
+        ${p.badge ? `<span class="pcard-badge new">${p.badge}</span>` : ''}
+        ${p.images.length > 1 ? `
+          <button class="pcard-nav pcard-nav-prev">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="pcard-nav pcard-nav-next">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+          </button>` : ''}
+      </div>
+      ${p.images.length > 1 ? '<div class="pcard-dots"></div>' : ''}
+      <div class="pcard-body">
+        <div class="pcard-top">
+          <div class="pcard-name">${p.name}</div>
+          <div class="pcard-price">${fmt(p.precoKg)}<small>/ kg</small></div>
+        </div>
+        <p class="pcard-desc">${p.desc}</p>
+        <div class="pcard-customize">
+          ${massaHTML}
+          ${saboresHTML}
+          <div class="pcard-fields-row">${camposHTML}</div>
+          ${obsHTML}
+        </div>
+        ${sliderHTML}
+        ${extrasHTML}
+        <button class="btn btn-primary btn-full" onclick="addBoloToCart('${p.id}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar ao Carrinho
+        </button>
+      </div>
+    </div>`;
+}
+
+/* ── RICH CARD ── */
+function renderRichCard(p, i) {
+  const cardClass = p.cardStyle==='festa'  ? 'pcard-festa'
+                  : p.cardStyle==='gold'   ? 'pcard-gold'
+                  : p.cardStyle==='gourmet'? 'pcard-gourmet'
+                  : p.cardStyle==='promo'  ? 'pcard-promo'
+                  : '';
+  const galleryHTML  = buildGalleryHTML(p);
+  const includesHTML = p.includes ? `
+    <ul class="pcard-includes">
+      ${p.includes.map(item=>`<li>${item}</li>`).join('')}
+    </ul>` : '';
+
+  const selectsHTML  = p.selects ? p.selects.map(s=>`
+    <div>
+      <span class="pcard-field-label">${s.label}</span>
+      <select class="pcard-select" id="${s.id}">
+        ${s.options.map(o=>`<option value="${o}">${o}</option>`).join('')}
+      </select>
+    </div>`).join('') : '';
+
+  const saborHTML    = (!p.selects && p.sabores) ? buildSaborSelect(p.id, p.sabores) : '';
+  const obsHTML      = buildObsField(p.campoObs);
+  const qtyHTML = p.cardStyle==='donut' ? `
+    <div class="pcard-qty-row">
+      <span class="pcard-qty-label">Unidades <span style="color:var(--text-light);font-size:11px">(mín. ${p.minQty})</span></span>
+      <div class="pcard-qty-ctrl">
+        <button class="pcard-qty-btn" onclick="changeDonutCardQty('${p.id}',-5)">−5</button>
+        <span class="pcard-qty-num" id="${p.id}-qty">${p.minQty}</span>
+        <button class="pcard-qty-btn" onclick="changeDonutCardQty('${p.id}',5)">+5</button>
+      </div>
+    </div>` : '';
+
+  let priceDisplay = '';
+  if (p.priceOld) {
+    priceDisplay = `
+      <div class="pcard-price-promo">
+        <span class="price-old">${fmt(p.priceOld)}</span>
+        <span class="price-new">${fmt(p.price)}</span>
+        <small>${p.priceLabel||'unidade'}</small>
+      </div>`;
+  } else if (p.cardStyle==='donut') {
+    priceDisplay = `<div class="pcard-price">${fmt(p.pricePerUnit)}<small>/ unidade</small></div>`;
+  } else {
+    priceDisplay = `<div class="pcard-price">${fmt(p.price)}<small>${p.priceLabel||'unidade'}</small></div>`;
+  }
+
+  const totalRowHTML = p.cardStyle==='donut' ? `
+    <div class="pcard-price-row" data-donut-qty="${p.id}">
+      <span class="pcard-price-row-label">Total estimado</span>
+      <span class="pcard-price-row-val" id="${p.id}-price-display">${fmt(p.minQty*p.pricePerUnit)}</span>
+    </div>` : '';
+
+  const btnLabel = p.cardStyle==='festa' ? 'Adicionar Festa ao Carrinho'
+                 : p.cardStyle==='donut' ? 'Adicionar Donuts ao Carrinho'
+                 : p.cardStyle==='promo' ? '🔥 Aproveitar Promoção'
+                 : 'Adicionar ao Carrinho';
+
+  return `
+    <div class="pcard ${cardClass} reveal" style="transition-delay:${i*0.06}s">
+      ${galleryHTML}
+      <div class="pcard-body">
+        <div class="pcard-top">
+          <div class="pcard-name">${p.name}</div>
+          ${priceDisplay}
+        </div>
+        <p class="pcard-desc">${p.desc}</p>
+        ${includesHTML}
+        <div class="pcard-customize">
+          ${selectsHTML}
+          ${saborHTML}
+          ${qtyHTML}
+          ${obsHTML}
+        </div>
+        ${totalRowHTML}
+        <button class="btn btn-primary btn-full" onclick="addRichCardToCart('${p.id}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          ${btnLabel}
+        </button>
+      </div>
+    </div>`;
+}
+
+/* ── KIT CARD ── */
+function renderKitCard(p, i) {
+  const galleryHTML = buildGalleryHTML(p);
+  const kitsHTML = CONFIG.kits.map(k => `
+    <div class="kit-option reveal" id="kit-opt-${k.id}" onclick="selectKit('${p.id}','${k.id}')">
+      <div class="kit-option-header">
+        <span class="kit-option-name">${k.name}</span>
+        <span class="kit-option-price">${fmt(k.price)}</span>
+      </div>
+      <div class="kit-option-items">
+        ${k.includes.map(item=>`<span>${item}</span>`).join('')}
+      </div>
+    </div>`).join('');
+
+  const saborBoloHTML = `
+    <div>
+      <span class="pcard-field-label">Sabor do Bolo</span>
+      <select class="pcard-select" id="${p.id}-sabor-bolo">
+        ${p.saborBolo.map(s=>`<option value="${s}">${s}</option>`).join('')}
+      </select>
+    </div>`;
+  const saborDoceHTML = `
+    <div>
+      <span class="pcard-field-label">Sabor dos Doces</span>
+      <select class="pcard-select" id="${p.id}-sabor-doce">
+        ${p.saborDoce.map(s=>`<option value="${s}">${s}</option>`).join('')}
+      </select>
+    </div>`;
+  const saborSalgHTML = `
+    <div>
+      <span class="pcard-field-label">Sabor dos Salgados</span>
+      <select class="pcard-select" id="${p.id}-sabor-salg">
+        ${p.saborSalg.map(s=>`<option value="${s}">${s}</option>`).join('')}
+      </select>
+    </div>`;
+  const obsHTML = buildObsField(p.campoObs);
+
+  return `
+    <div class="pcard pcard-gold reveal" style="transition-delay:${i*0.06}s">
+      ${galleryHTML}
+      <div class="pcard-body">
+        <div class="pcard-top">
+          <div class="pcard-name">${p.name}</div>
+          <div class="pcard-price" id="${p.id}-price-display" style="font-size:16px;color:var(--text-mid)">Selecione</div>
+        </div>
+        <p class="pcard-desc">${p.desc}</p>
+        <div class="kit-selector">
+          <span class="kit-selector-title">✦ Escolha o Kit por número de pessoas</span>
+          <div class="kit-options">${kitsHTML}</div>
+        </div>
+        <div class="pcard-customize" style="margin-top:16px">
+          ${saborBoloHTML}
+          ${saborDoceHTML}
+          ${saborSalgHTML}
+          ${obsHTML}
+        </div>
+        <button class="btn btn-primary btn-full" onclick="addKitToCart('${p.id}')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar Kit ao Carrinho
+        </button>
+      </div>
+    </div>`;
+}
+
+function selectKit(productId, kitId) {
+  document.querySelectorAll('.kit-option').forEach(el => el.classList.remove('selected'));
+  document.getElementById(`kit-opt-${kitId}`)?.classList.add('selected');
+  selectedKitId = kitId;
+  const kit = CONFIG.kits.find(k => k.id === kitId);
+  if (!kit) return;
+  const priceEl = document.getElementById(`${productId}-price-display`);
+  if (priceEl) {
+    priceEl.style.fontSize = '20px';
+    priceEl.style.color = 'var(--choco)';
+    priceEl.textContent = fmt(kit.price);
+  }
+}
+
+/* ── AÇÕES DOS CARDS ── */
+function addBoloToCart(productId) {
+  const p = CONFIG.products.find(x => x.id === productId);
+  if (!p) return;
+  const saborEl = document.getElementById(`${productId}-sabor`);
+  const sabor   = saborEl ? saborEl.value : '';
+  const massaEl = document.querySelector(`input[name="${productId}-massa"]:checked`);
+  const massa   = massaEl ? massaEl.value : '';
+  const kg      = getBoloKg(productId);
+  const price   = getBoloPrice(productId);
+  let desc = p.name;
+  if (sabor) desc += ` · ${sabor}`;
+  desc += ` · ${kg}kg`;
+  if (massa) desc += ` · ${massa}`;
+  if (p.campos) {
+    p.campos.forEach(c => {
+      const val = document.getElementById(`${productId}-${c.id}`)?.value.trim();
+      if (val) desc += ` · ${c.label}: ${val}`;
+    });
+  }
+  if (p.campoObs) {
+    const obs = document.getElementById(`${p.id}-${p.campoObs.id}`)?.value.trim()
+      || document.getElementById(p.campoObs.id)?.value.trim();
+    if (obs) desc += ` · Obs: ${obs}`;
+  }
+  desc += getExtrasDesc(productId);
+  addToCart({ id: productId + '-' + Date.now(), name: p.name + ` (${kg}kg)`, desc, price, emoji: p.emoji });
+}
+
+function addRichCardToCart(productId) {
+  const p = CONFIG.products.find(x => x.id === productId);
+  if (!p) return;
+  let desc = ''; let price = p.price;
+  if (p.selects) {
+    const parts = p.selects.map(s => {
+      const val = document.getElementById(s.id)?.value;
+      return val ? `${s.label}: ${val}` : '';
+    }).filter(Boolean);
+    desc = parts.join(' · ');
+  }
+  if (p.cardStyle === 'donut') {
+    const qtyEl = document.getElementById(`${p.id}-qty`);
+    const qty   = qtyEl ? parseInt(qtyEl.textContent) : p.minQty;
+    price = qty * p.pricePerUnit;
+    desc  = `${qty} unidades × ${fmt(p.pricePerUnit)}`;
+    addToCart({ id: p.id + '-' + Date.now(), name: `${p.name} (${qty}un)`, desc, price, emoji: p.emoji }, 1);
+    return;
+  }
+  if (p.sabores && !p.selects) {
+    const sab = document.getElementById(`${p.id}-sabor`)?.value;
+    if (sab) desc = (desc ? desc + ' · ' : '') + `Sabor: ${sab}`;
+  }
+  if (p.campoObs) {
+    const obs = document.getElementById(p.campoObs.id)?.value.trim();
+    if (obs) desc = (desc ? desc + ' · ' : '') + `Obs: ${obs}`;
+  }
+  addToCart({ id: p.id + '-' + Date.now(), name: p.name, desc, price, emoji: p.emoji });
+}
+
+function addKitToCart(productId) {
+  if (!selectedKitId) { showToast('Selecione um Kit Festa primeiro!', '⚠️'); return; }
+  const p   = CONFIG.products.find(x => x.id === productId);
+  const kit = CONFIG.kits.find(k => k.id === selectedKitId);
+  if (!p || !kit) return;
+  const saborBolo = document.getElementById(`${productId}-sabor-bolo`)?.value || '';
+  const saborDoce = document.getElementById(`${productId}-sabor-doce`)?.value || '';
+  const saborSalg = document.getElementById(`${productId}-sabor-salg`)?.value || '';
+  const obs       = document.getElementById(p.campoObs.id)?.value.trim() || '';
+  let desc = `${kit.name} · Bolo: ${saborBolo}`;
+  if (saborDoce) desc += ` · Doces: ${saborDoce}`;
+  if (saborSalg) desc += ` · Salgados: ${saborSalg}`;
+  if (obs)       desc += ` · Obs: ${obs}`;
+  addToCart({ id: p.id + '-' + Date.now(), name: `Kit Festa — ${kit.name}`, desc, price: kit.price, emoji: p.emoji });
+}
+
+function changeDonutCardQty(productId, delta) {
+  const p     = CONFIG.products.find(x => x.id === productId);
+  const qtyEl = document.getElementById(`${productId}-qty`);
+  if (!qtyEl || !p) return;
+  let qty = parseInt(qtyEl.textContent) + delta;
+  qty = Math.max(p.minQty || 20, qty);
+  qtyEl.textContent = qty;
+  const priceEl = document.getElementById(`${productId}-price-display`);
+  if (priceEl) priceEl.textContent = fmt(qty * (p.pricePerUnit || 3));
+}
+function updateDonutPrice(productId) {
+  const p = CONFIG.products.find(x => x.id === productId);
+  if (!p || p.cardStyle !== 'donut') return;
+  const qtyEl = document.getElementById(`${productId}-qty`);
+  if (!qtyEl) return;
+  const qty = parseInt(qtyEl.textContent);
+  const priceEl = document.getElementById(`${productId}-price-display`);
+  if (priceEl) priceEl.textContent = fmt(qty * p.pricePerUnit);
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.getElementById('modalSheet').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── CARRINHO ── */
+function addToCart(item, qty = 1) {
+  const existing = cart.find(i => i.id === item.id);
+  if (existing) existing.qty += qty;
+  else          cart.push({ ...item, qty });
+  updateCartUI();
+  showToast(`${item.name} adicionado!`, item.emoji || '✦');
+  document.getElementById('cartBadge').animate(
+    [{transform:'scale(1)'},{transform:'scale(1.5)'},{transform:'scale(1)'}],
+    {duration:400, easing:'cubic-bezier(0.34,1.56,0.64,1)'}
+  );
+}
+function updateCartUI() {
+  const total = cartTotal();
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = count;
+  badge.classList.toggle('show', count > 0);
+  const floatCart = document.getElementById('floatCart');
+  floatCart.classList.toggle('visible', count > 0);
+  document.getElementById('floatCartTotal').textContent = fmt(total);
+  const itemsEl  = document.getElementById('cartItems');
+  const emptyEl  = document.getElementById('cartEmpty');
+  const footerEl = document.getElementById('cartFooter');
+  if (cart.length === 0) {
+    emptyEl.style.display = 'flex';
+    footerEl.style.display = 'none';
+    itemsEl.innerHTML = '';
+    itemsEl.appendChild(emptyEl);
+    return;
+  }
+  emptyEl.style.display = 'none';
+  footerEl.style.display = 'block';
+  document.getElementById('cartTotal').textContent = fmt(total);
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-img-placeholder">${item.emoji || '🍰'}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        ${item.desc ? `<div class="cart-item-sub">${item.desc}</div>` : ''}
+        <div class="cart-item-price">${fmt(item.price)} / un</div>
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+        </div>
+      </div>
+      <div class="cart-item-total">${fmt(item.price * item.qty)}</div>
+    </div>`).join('');
+  itemsEl.innerHTML = '';
+  itemsEl.appendChild(emptyEl);
+  itemsEl.appendChild(wrapper);
+}
+function changeQty(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+  updateCartUI();
+}
+function openCart()  { document.getElementById('cartOverlay').classList.add('open'); document.getElementById('cartPanel').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); document.getElementById('cartPanel').classList.remove('open'); document.body.style.overflow=''; }
+
+/* ── CHECKOUT ── */
+function goToCheckout() {
+  if (cart.length === 0) { showToast('Carrinho vazio!', '⚠️'); return; }
+  closeCart();
+  openScreen('checkoutScreen');
+  showStep(1);
+}
+function showStep(n) {
+  currentStep = n;
+  [1,2,3].forEach(s => {
+    document.getElementById(`checkoutStep${s}`).style.display = s===n ? 'block' : 'none';
+    const dot = document.getElementById(`step${s}dot`);
+    dot.className = 'step-dot ' + (s < n ? 'done' : s === n ? 'active' : 'pending');
+  });
+  [1,2].forEach(s => {
+    document.getElementById(`line${s}`).className = 'step-line ' + (s < n ? 'done' : '');
+  });
+}
+function goToStep2() {
+  const name     = document.getElementById('custName').value.trim();
+  const phone    = document.getElementById('custPhone').value.trim();
+  const delivery = document.querySelector('input[name="delivery"]:checked')?.value;
+  const address  = document.getElementById('custAddress').value.trim();
+  const obs      = document.getElementById('custObs').value.trim();
+  if (!name || !phone) { showToast('Preencha nome e telefone!', '⚠️'); return; }
+  if (delivery === 'entrega' && !address) { showToast('Informe o endereço para entrega!', '⚠️'); return; }
+  document.getElementById('summaryName').textContent     = name;
+  document.getElementById('summaryPhone').textContent    = phone;
+  document.getElementById('summaryDelivery').textContent = delivery === 'retirada' ? '🏠 Retirada' : '🚗 Entrega';
+  const addrRow = document.getElementById('summaryAddressRow');
+  if (address) { addrRow.style.display='flex'; document.getElementById('summaryAddress').textContent=address; }
+  else addrRow.style.display='none';
+  const obsRow = document.getElementById('summaryObsRow');
+  if (obs) { obsRow.style.display='flex'; document.getElementById('summaryObs').textContent=obs; }
+  else obsRow.style.display='none';
+  document.getElementById('orderSummaryTotal').textContent = fmt(cartTotal());
+  document.getElementById('orderSummaryItems').innerHTML = cart.map(i => `
+    <div class="order-sum-item">
+      <span class="order-sum-item-name">${i.emoji||''} ${i.name}</span>
+      <span class="order-sum-item-qty">×${i.qty}</span>
+      <span class="order-sum-item-price">${fmt(i.price*i.qty)}</span>
+    </div>`).join('');
+  showStep(2);
+}
+function backToStep1() { showStep(1); }
+function goToPayment() {
+  const total   = cartTotal();
+  const entrada = total * CONFIG.entrancePct;
+  document.getElementById('paymentTotal').textContent   = fmt(total);
+  document.getElementById('paymentEntrada').textContent = fmt(entrada);
+  document.getElementById('pixKeyDisplay').textContent  = CONFIG.pixKey;
+  generateQR(CONFIG.pixKey, entrada);
+  showStep(3);
+}
+function goToConfirmation() {
+  const total    = cartTotal();
+  const entrada  = total * CONFIG.entrancePct;
+  const delivery = document.querySelector('input[name="delivery"]:checked')?.value;
+  document.getElementById('confirmSummary').innerHTML = `
+    <div class="info-card">
+      <div class="info-card-title">Detalhes da encomenda</div>
+      <div class="info-row"><span class="info-row-label">Pedido</span><span class="info-row-value">${cart.map(i=>`${i.emoji||''} ${i.name} ×${i.qty}`).join(', ')}</span></div>
+      <div class="info-row"><span class="info-row-label">Total</span><span class="info-row-value">${fmt(total)}</span></div>
+      <div class="info-row"><span class="info-row-label">Entrada paga</span><span class="info-row-value" style="color:#2d8a50">${fmt(entrada)} ✓</span></div>
+      <div class="info-row"><span class="info-row-label">Saldo restante</span><span class="info-row-value">${fmt(total-entrada)}</span></div>
+      <div class="info-row"><span class="info-row-label">Entrega</span><span class="info-row-value">${delivery==='retirada'?'🏠 Retirada':'🚗 Entrega'}</span></div>
+    </div>`;
+  document.getElementById('wppConfirmLink').href = `https://wa.me/${CONFIG.whatsapp}?text=${buildWppMessage()}`;
+  closeScreen('checkoutScreen');
+  openScreen('confirmationScreen');
+}
+function openScreen(id)  { document.getElementById(id).classList.add('active'); document.body.style.overflow='hidden'; }
+function closeScreen(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow=''; }
+function copyPix() {
+  const key  = CONFIG.pixKey;
+  const done = () => {
+    const fb = document.getElementById('copyFeedback');
+    fb.classList.add('show');
+    setTimeout(() => fb.classList.remove('show'), 2500);
+    showToast('Chave Pix copiada!', '✅');
+  };
+  if (navigator.clipboard) navigator.clipboard.writeText(key).then(done).catch(() => fallbackCopy(key, done));
+  else fallbackCopy(key, done);
+}
+function fallbackCopy(text, cb) {
+  const el = document.createElement('textarea');
+  el.value = text; document.body.appendChild(el); el.select();
+  document.execCommand('copy'); document.body.removeChild(el);
+  cb();
+}
+function sendComprovante() {
+  const msg = encodeURIComponent('Olá, realizei o pagamento da entrada do meu pedido. Segue o comprovante!');
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${msg}`, '_blank');
+}
+function buildWppMessage() {
+  const name     = document.getElementById('custName').value.trim();
+  const phone    = document.getElementById('custPhone').value.trim();
+  const delivery = document.querySelector('input[name="delivery"]:checked')?.value;
+  const address  = document.getElementById('custAddress').value.trim();
+  const obs      = document.getElementById('custObs').value.trim();
+  const total    = cartTotal();
+  const entrada  = total * CONFIG.entrancePct;
+  let msg = `🎂 *Novo Pedido — Kelin Cakes*\n\n`;
+  msg += `👤 *Nome:* ${name}\n`;
+  msg += `📱 *Telefone:* ${phone}\n`;
+  msg += `📦 *Entrega:* ${delivery==='retirada'?'Retirada':'Entrega'}\n`;
+  if (address) msg += `📍 *Endereço:* ${address}\n`;
+  msg += `\n🛒 *Itens:*\n`;
+  cart.forEach(i => {
+    msg += `  • ${i.emoji||''} ${i.name} ×${i.qty} — ${fmt(i.price*i.qty)}\n`;
+    if (i.desc) msg += `    _${i.desc}_\n`;
+  });
+  msg += `\n💰 *Total:* ${fmt(total)}\n`;
+  msg += `✅ *Entrada (50%):* ${fmt(entrada)}\n`;
+  msg += `💳 *Restante:* ${fmt(total-entrada)}\n`;
+  if (obs) msg += `\n📝 *Obs:* ${obs}\n`;
+  msg += `\nAguardo a confirmação! 💕`;
+  return encodeURIComponent(msg);
+}
+function resetAll() {
+  cart = [];
+  selectedKitId = null;
+  updateCartUI();
+  ['custName','custPhone','custAddress','custObs'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const r = document.getElementById('deliveryRetirada');
+  if (r) r.checked = true;
+  const ag = document.getElementById('addressGroup');
+  if (ag) ag.style.display = 'none';
+  showStep(1);
+}
+
+/* ── PIX QR ── */
+function generateQR(pixKey, amount) {
+  const container = document.getElementById('qrWrap');
+  const size = 180;
+  container.innerHTML = createQRSVG(buildPixPayload(pixKey, amount, CONFIG.pixName), size);
+}
+function buildPixPayload(key, amount, name) {
+  const merchantName = name.substring(0,25).padEnd(1);
+  const keyField     = `0014BR.GOV.BCB.PIX0136${key}`;
+  const merchantInfo = `26${String(keyField.length).padStart(2,'0')}${keyField}`;
+  const amountStr    = amount.toFixed(2);
+  const amountField  = `5405${amountStr}`;
+  const nameField    = `59${String(merchantName.length).padStart(2,'0')}${merchantName}`;
+  const cityField    = `6009SAO PAULO`;
+  const base         = `000201010211${merchantInfo}52040000530398665${amountField}${nameField}${cityField}6304`;
+  const crc          = crc16(base+'0000').toString(16).toUpperCase().padStart(4,'0');
+  return base+crc;
+}
+function crc16(str) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < str.length; i++) {
+    crc ^= str.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      if (crc & 0x8000) crc = (crc << 1) ^ 0x1021;
+      else crc <<= 1;
+      crc &= 0xFFFF;
+    }
+  }
+  return crc;
+}
+function createQRSVG(data, size) {
+  const seed=hashCode(data), cells=21, cell=Math.floor(size/cells), pad=Math.floor((size-cells*cell)/2);
+  let rects='';
+  const rng=seededRng(seed);
+  const finderPos=[[0,0],[0,cells-7],[cells-7,0]];
+  const finderMask=new Set();
+  finderPos.forEach(([r,c])=>{ for(let dr=0;dr<7;dr++) for(let dc=0;dc<7;dc++) finderMask.add(`${r+dr},${c+dc}`); });
+  for(let r=0;r<cells;r++) {
+    for(let c=0;c<cells;c++) {
+      const key=`${r},${c}`;
+      let dark=false;
+      if(finderMask.has(key)) {
+        const pos=finderPos.find(([pr,pc])=>r>=pr&&r<pr+7&&c>=pc&&c<pc+7);
+        if(pos){ const[pr,pc]=pos,dr=r-pr,dc=c-pc; dark=(dr===0||dr===6||dc===0||dc===6||(dr>=2&&dr<=4&&dc>=2&&dc<=4)); }
+      } else { dark=rng()>0.45; if(r===6||c===6) dark=(r+c)%2===0; }
+      if(dark) rects+=`<rect x="${pad+c*cell}" y="${pad+r*cell}" width="${cell}" height="${cell}" fill="#3a2a24"/>`;
+    }
+  }
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="${size}" height="${size}" fill="white"/>
+    ${rects}
+    <rect x="${pad+8*cell}" y="${pad+8*cell}" width="${(cells-16)*cell}" height="${(cells-16)*cell}" fill="white"/>
+    <text x="${size/2}" y="${size/2+6}" text-anchor="middle" font-family="Jost,sans-serif" font-size="11" fill="#7b4f3a" font-weight="600">PIX</text>
+  </svg>`;
+}
+function hashCode(s){ let h=0; for(let i=0;i<s.length;i++) h=Math.imul(31,h)+s.charCodeAt(i)|0; return Math.abs(h); }
+function seededRng(seed){ let s=seed; return function(){ s^=s<<13; s^=s>>7; s^=s<<17; return (s>>>0)/4294967296; }; }
+
+/* ── Nav scroll ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ── Toggle endereço ── */
+document.querySelectorAll('input[name="delivery"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('addressGroup').style.display =
+      (r.value === 'entrega' && r.checked) ? 'block' : 'none';
+  });
+});
+
+/* ── Scroll reveal ── */
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      revealObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+function initReveal() {
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+}
+
+/* ── Init ── */
+document.addEventListener('DOMContentLoaded', () => {
+  renderProducts();
+  initReveal();
+});
+</script>
+</body>
+</html>
